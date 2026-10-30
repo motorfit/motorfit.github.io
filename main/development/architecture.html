@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Architecture &#8212; MotorFit</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1c815793" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=63867087"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fc97db16"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'development/architecture';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = '/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="canonical" href="https://motorfit.github.io/main/development/architecture.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="RS05 findings" href="../case-studies/rs05-findings.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">MotorFit</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/motorfit/motorfit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/motorfit/motorfit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links" aria-label="Documentation navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/workflow.html">Workflow</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Architecture</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">#</a></h1>
+<p>MotorFit organizes the workflow around motor, controller, fixture and dataset boundaries. RS05-specific evidence lives in a <a class="reference internal" href="../case-studies/rs05.html"><span class="std std-doc">reference study</span></a>.</p>
+<p>The reusable device unit is a protocol family; the configuration unit is a motor model; the calibrated unit is a mounted device. RS00–RS06 share one RobStride driver; Damiao MIT uses a separate native driver.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Directory</p></th>
+<th class="head"><p>Responsibility</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/motorfit/devices/</span></code></p></td>
+<td><p>Native protocols, backend selection and supported-model catalogue</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">acquisition</span></code></p></td>
+<td><p>Generic Python recorder, trajectories, formal CSV-to-BAM export</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">identification/bam</span></code></p></td>
+<td><p>Torque-MIT adapter and unchanged upstream BAM integration</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">identification/{mujoco,newton,mjlab}.py</span></code></p></td>
+<td><p>Frozen M1 replay on optional backends</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rigs</span></code></p></td>
+<td><p>Recorded pendulum geometry and CAD mass properties</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dataset.py</span></code></p></td>
+<td><p>Relative paths, content hashes, motor identity and split checks</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">validation</span></code></p></td>
+<td><p>Feedback audit, stationary evidence, solver options and release events</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scripts</span></code></p></td>
+<td><p>CAD preparation, measured-data figure generation and replay rendering</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A setup in <code class="docutils literal notranslate"><span class="pre">configs/setups/</span></code> composes model profiles from <code class="docutils literal notranslate"><span class="pre">motors/</span></code>, measured geometry from <code class="docutils literal notranslate"><span class="pre">fixtures/</span></code> and experiment settings from <code class="docutils literal notranslate"><span class="pre">acquisition/</span></code>. References resolve against that setup file. Each mounted device has its own ignored coordinate file in <code class="docutils literal notranslate"><span class="pre">configs/local/</span></code>. <code class="docutils literal notranslate"><span class="pre">configs/simulation/</span></code> contains reusable solver settings; measured release scenes belong to the local study archive. Loading a model or an offline dataset does not access the device driver.</p>
+<p>Dataset schema 1 has a <code class="docutils literal notranslate"><span class="pre">records</span></code> list. Every recording names its processed/raw file and BAM reference prediction with SHA-256, plus optional original frame files. All current paths resolve relative to the manifest. Historical absolute paths inside unchanged raw JSON are evidence only: executable readers never use them as file locations.</p>
+<p>The full dataset and the three-record example share this schema. The formal split and UID travel with the data; arbitrary changes to a current TOML cannot reinterpret a saved recording or M1. <code class="docutils literal notranslate"><span class="pre">motorfit</span> <span class="pre">verify</span></code> verifies the model and all named inputs.</p>
+<p>Add a motor of the same protocol by adding a sourced model TOML and a separate setup. Add another protocol as a driver and a control-law adapter. Add another fixture as configuration, or a new rig implementation if its physical equations differ.</p>
+<p>The registry selects the RobStride or Damiao driver. Both use the torque-MIT actuator and measured pendulum rig; see <a class="reference internal" href="../reference/motors.html"><span class="std std-doc">motor support</span></a>. These boundaries prevent an SDK method name from silently implying compatible units or fresh measurement timing.</p>
+<p>The installed command is <code class="docutils literal notranslate"><span class="pre">motorfit</span></code>; Python modules live under <code class="docutils literal notranslate"><span class="pre">motorfit</span></code>. All acquisition goes through <code class="docutils literal notranslate"><span class="pre">motorfit</span> <span class="pre">record</span></code>. The C++ helper in <code class="docutils literal notranslate"><span class="pre">validation/release_event.cpp</span></code> is used only for MuJoCo event replay.</p>
+<section id="extension-points">
+<h2>Extension points<a class="headerlink" href="#extension-points" title="Link to this heading">#</a></h2>
+<section id="motor-drivers-and-control-laws">
+<h3>Motor drivers and control laws<a class="headerlink" href="#motor-drivers-and-control-laws" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Boundary</p></th>
+<th class="head"><p>Implementation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Motor specification</p></td>
+<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/devices/spec.py"><code class="docutils literal notranslate"><span class="pre">MotorSpec</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Native backend selection and command quantization</p></td>
+<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/devices/registry.py"><code class="docutils literal notranslate"><span class="pre">registry.py</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Device lifecycle and wire evidence</p></td>
+<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/tree/main/src/motorfit/devices"><code class="docutils literal notranslate"><span class="pre">devices/</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Recording schema and command timing</p></td>
+<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/acquisition/recorder.py"><code class="docutils literal notranslate"><span class="pre">recorder.py</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p>BAM input-to-torque law</p></td>
+<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/identification/bam/actuator.py"><code class="docutils literal notranslate"><span class="pre">MITActuator</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Saved model/log loading</p></td>
+<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/identification/bam/runner.py"><code class="docutils literal notranslate"><span class="pre">runner.py</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Frozen M1 physics replay</p></td>
+<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/tree/main/src/motorfit/identification"><code class="docutils literal notranslate"><span class="pre">identification/</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Add an adapter only after specifying actual units, gains, saturation, enable/fault state and fresh feedback semantics. An interface named <code class="docutils literal notranslate"><span class="pre">send_mit</span></code> does not guarantee the same law: <a class="reference internal" href="../reference/motors.html"><span class="std std-doc">the support matrix</span></a> documents the reference protocols’ differences. The snapshot defines the torque-MIT ranges. Unrecognized families are rejected.</p>
+<p>Keep device codecs and transports separate from the numerical model. Test wire fixtures, shutdown failures and an offline process/fit/load cycle, then collect a small real dataset and evaluate independent runs before making accuracy claims.</p>
+</section>
+<section id="fixtures">
+<h3>Fixtures<a class="headerlink" href="#fixtures" title="Link to this heading">#</a></h3>
+<p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/rigs/pendulum.py"><code class="docutils literal notranslate"><span class="pre">Pendulum</span></code></a> supplies the current inertia and gravity terms. Measure its inputs independently of the motor fit. A fixture with different equations needs a rig implementation and a matching simulation scene. <code class="docutils literal notranslate"><span class="pre">MITActuator</span></code> currently selects <code class="docutils literal notranslate"><span class="pre">Pendulum</span></code>; a different rig requires explicit adapter wiring.</p>
+<p>The archived <code class="docutils literal notranslate"><span class="pre">data/rs05/assets/bench/</span></code> is the reference assembly’s geometry. Do not treat its mass properties or appearance as measured geometry for a new device.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../case-studies/rs05-findings.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">RS05 findings</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="contributing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Contributing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extension-points">Extension points</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#motor-drivers-and-control-laws">Motor drivers and control laws</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixtures">Fixtures</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, MotorFit contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

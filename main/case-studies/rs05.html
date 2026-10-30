@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>RS05 study &#8212; MotorFit</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1c815793" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=63867087"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fc97db16"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'case-studies/rs05';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = '/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="canonical" href="https://motorfit.github.io/main/case-studies/rs05.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RS05 fixture" href="rs05-fixture.html" />
+    <link rel="prev" title="Protocols" href="../reference/protocols.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">MotorFit</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/motorfit/motorfit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/motorfit/motorfit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links" aria-label="Documentation navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/workflow.html">Workflow</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rs05-fixture.html">Fixture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rs05-findings.html">Findings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../development/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/contributing.html">Contributing</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">RS05 study</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="rs05-study">
+<h1>RS05 study<a class="headerlink" href="#rs05-study" title="Link to this heading">#</a></h1>
+<p><a class="reference internal" href="../index.html"><span class="std std-doc">MotorFit</span></a> uses this study as a worked example of acquisition, identification, freezing and validation. The reusable workflow is described in <a class="reference internal" href="../getting-started/workflow.html"><span class="std std-doc">the workflow guide</span></a>; this page records the measured instance.</p>
+<p><img alt="RS05 bench and three-backend replay" src="../_images/bench-preview.png" /></p>
+<section id="experiment">
+<h2>Experiment<a class="headerlink" href="#experiment" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Recorded study</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Motor</p></td>
+<td><p>RobStride RS05, UID <code class="docutils literal notranslate"><span class="pre">542b38001c443916</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Fixture</p></td>
+<td><p>Measured pendulum with 100/200/500 g weights and load-specific fasteners</p></td>
+</tr>
+<tr class="row-even"><td><p>Formal recordings</p></td>
+<td><p>37 per load; 111 total, 227,511 original samples</p></td>
+</tr>
+<tr class="row-odd"><td><p>Split</p></td>
+<td><p>32 training / 16 gain validation / 24 load validation / 36 final test / 3 long test</p></td>
+</tr>
+<tr class="row-even"><td><p>Acquisition</p></td>
+<td><p>Vendor RS05 C++ library through the SocketCAN adapter; independent wire capture</p></td>
+</tr>
+<tr class="row-odd"><td><p>Identification</p></td>
+<td><p>BAM M1–M6 comparison; frozen M1 selected under the recorded protocol</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The example includes the frozen <a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/tests/fixtures/offline/model.json">M1 snapshot</a>; new fits must write elsewhere. The local archive stores the full model collection in <code class="docutils literal notranslate"><span class="pre">data/rs05/models/</span></code>, including <code class="docutils literal notranslate"><span class="pre">comparison/</span></code> for the other five selected BAM families and <code class="docutils literal notranslate"><span class="pre">provenance/</span></code> for the fitting protocol and selection freeze. Its <code class="docutils literal notranslate"><span class="pre">data/rs05/formal-v3/manifest.json</span></code> preserves the original record IDs, splits and hashes. See <a class="reference internal" href="rs05-fixture.html"><span class="std std-doc">fixture properties</span></a> for measured masses and the distinction between the identification fixture and finite-body CAD replay.</p>
+<p>Each load used Kp 10/20/30, with Kd values respectively:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Weight</p></th>
+<th class="head"><p>Kd at Kp=10 / 20 / 30</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>100 g</p></td>
+<td><p>0.5 / 0.6 / 0.8</p></td>
+</tr>
+<tr class="row-odd"><td><p>200 g</p></td>
+<td><p>0.6 / 0.8 / 1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>500 g</p></td>
+<td><p>0.9 / 1.2 / 1.5</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These settings describe this fixture. Earlier 200 g Kp=30/Kd=0.5 trials showed persistent oscillation and are outside the formal dataset. The completed 100 g run 15 has a documented wrapper-finalization interruption; its recording and verification evidence remain included.</p>
+</section>
+<section id="original-acquisition-format">
+<h2>Original acquisition format<a class="headerlink" href="#original-acquisition-format" title="Link to this heading">#</a></h2>
+<p>The recordings used the <a class="reference external" href="https://github.com/RobStride/SampleProgram/tree/5f598686b05fcc527ee0fc0ea954f0afd652b234">vendor RS05 C++ source</a> with an RS05-specific SocketCAN caller. New acquisition uses <code class="docutils literal notranslate"><span class="pre">motorfit</span> <span class="pre">record</span></code>; the recorded <a class="reference internal" href="#rs05-reference-acquisition">reference schedules</a> describe the original experiment.</p>
+<p>To reconstruct a BAM export from an original CSV/wire capture:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>motorfit<span class="w"> </span>export-formal<span class="w"> </span>--record<span class="w"> </span>&lt;original-record-directory&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--metadata<span class="w"> </span>&lt;that-records-raw.json&gt;<span class="w"> </span>--output<span class="w"> </span>&lt;new-raw.json&gt;
+</pre></div>
+</div>
+<p>Use metadata from that same recording: motor identity, coordinate, fixture and split must match its capture. This is an offline data converter and requires no vendor library.</p>
+</section>
+<section id="rs05-reference-acquisition">
+<h2>RS05 reference acquisition<a class="headerlink" href="#rs05-reference-acquisition" title="Link to this heading">#</a></h2>
+<p>The supplied RS05 dataset was recorded with a C++ collector using the following timing:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Trajectory</p></th>
+<th class="head"><p>Schedule</p></th>
+<th class="head text-right"><p>Nominal total</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sin_time_square</span></code>, <code class="docutils literal notranslate"><span class="pre">sin_sin</span></code>, <code class="docutils literal notranslate"><span class="pre">up_and_down</span></code></p></td>
+<td><p>2 s initial hold + 12 s excitation + 4 s return + 2 s final hold</p></td>
+<td class="text-right"><p>20 s</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lift_and_drop</span></code></p></td>
+<td><p>2 s initial hold + 4 s lift + 14 s torque-disabled observation</p></td>
+<td class="text-right"><p>20 s</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">long_sweep</span></code></p></td>
+<td><p>2 s initial hold + 30 s excitation + 4 s return + 2 s final hold</p></td>
+<td class="text-right"><p>38 s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The schedule contains 2,001 or 3,801 timestamps at 100 Hz, including the final nominal endpoint. These are properties of the recorded experiment. The current Python recorder uses the configurable duration described above; choosing 20 seconds does not reproduce these staged schedules.</p>
+<p>The initial/final holds provide observation windows around motion. The lift/drop protocol keeps collecting feedback while the actuator is disabled. The long sweep supplies an additional extended test. These choices describe the recorded experiment; a new actuator study should select and document its own windows.</p>
+</section>
+<section id="results-and-limits">
+<h2>Results and limits<a class="headerlink" href="#results-and-limits" title="Link to this heading">#</a></h2>
+<p>For the MuJoCo 3.17 full-option baseline, final-test position MAE is about 2.220 mrad. The representative 200 g release still has a stop bias of roughly 7 mrad and small measured retreat that frozen M1 does not reproduce. Aligning the disable event to STOP send improves early timing but does not explain that residual. See <a class="reference internal" href="rs05-findings.html"><span class="std std-doc">measured limitations</span></a>.</p>
+<p>The recording, firmware, controller, fixture and validation versions define the scope of these results. Other units, controller families and robot contact tasks need their own identification and evaluation evidence. Use <a class="reference internal" href="../guide/configuration.html"><span class="std std-doc">bring your own motor</span></a> to adapt the workflow.</p>
+</section>
+<section id="what-to-reproduce">
+<h2>What to reproduce<a class="headerlink" href="#what-to-reproduce" title="Link to this heading">#</a></h2>
+<p>Git includes the self-contained <a class="reference internal" href="../getting-started/quickstart.html"><span class="std std-doc">three-record example</span></a>, its frozen M1 model and saved predictions. The complete study belongs to the local archive under <code class="docutils literal notranslate"><span class="pre">data/rs05/</span></code>, which is ignored as a whole, including manifests and summaries:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/rs05/
+  formal-v3/     # 111 recordings, processed data, captures and manifest
+  models/        # fitted models and selection provenance
+  results/       # predictions, comparisons, diagnostics and videos
+  assets/bench/  # source CAD, meshes and mass-property manifest
+  scenes/release/
+  environments/ # recorded runtime versions
+  artwork/       # reference renders and figure-production materials
+</pre></div>
+</div>
+<p>If a supplied archive includes an adjacent <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>, check it with <code class="docutils literal notranslate"><span class="pre">sha256sum</span> <span class="pre">-c</span> <span class="pre">SHA256SUMS</span></code> before extraction. Full-study commands then verify the model and all indexed inputs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>motorfit<span class="w"> </span>verify<span class="w"> </span>--dataset<span class="w"> </span>data/rs05/formal-v3/manifest.json
+uv<span class="w"> </span>run<span class="w"> </span>motorfit<span class="w"> </span>audit-feedback<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>data/rs05/formal-v3/manifest.json<span class="w"> </span>--output<span class="w"> </span>outputs/rs05-audit
+</pre></div>
+</div>
+<p>Use the <a class="reference internal" href="../guide/validation.html"><span class="std std-doc">validation guide</span></a> for CAD replay, solver options and release timing comparisons. The archive’s <code class="docutils literal notranslate"><span class="pre">data/rs05/results/README.md</span></code> indexes model-selection evidence, frozen BAM predictions, three-backend comparisons, feedback audits and residual studies. See the <a class="reference internal" href="../development/contributing.html"><span class="std std-doc">repository policy</span></a> for tracking rules.</p>
+</section>
+<section id="advanced-validation">
+<h2>Advanced validation<a class="headerlink" href="#advanced-validation" title="Link to this heading">#</a></h2>
+<p>These commands use the complete local RS05 archive. They are not required for the
+bundled offline fixture.</p>
+<section id="cad-and-solver-options">
+<h3>CAD and solver options<a class="headerlink" href="#cad-and-solver-options" title="Link to this heading">#</a></h3>
+<p>The included physics adapters implement frozen M1 with the recorded MIT-style controller and pendulum dynamics. BAM fitting supports M1–M6; replaying another family or rig requires the corresponding physics integration. A new manifest alone does not supply that integration.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation
+uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation<span class="w"> </span>motorfit<span class="w"> </span>replay<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>data/rs05/formal-v3/manifest.json<span class="w"> </span>--engine<span class="w"> </span>mujoco<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--scene-assets<span class="w"> </span>data/rs05/assets/bench<span class="w"> </span>--output<span class="w"> </span>outputs/cad-replay
+</pre></div>
+</div>
+<p>Without <code class="docutils literal notranslate"><span class="pre">--scene-assets</span></code>, replay uses the equivalent point-load fixture used for fitting. <code class="docutils literal notranslate"><span class="pre">--fixture-model</span> <span class="pre">identified_point</span></code> gives the CAD appearance with identification-equivalent inertia. <code class="docutils literal notranslate"><span class="pre">--ablations</span></code> evaluates delay/friction/armature removal on the training split.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation<span class="w"> </span>motorfit<span class="w"> </span>replay<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>data/rs05/formal-v3/manifest.json<span class="w"> </span>--engine<span class="w"> </span>mujoco<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--scene-assets<span class="w"> </span>data/rs05/assets/bench<span class="w"> </span>--options<span class="w"> </span>configs/simulation/asroballet-option.xml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--friction<span class="w"> </span>default<span class="w"> </span>--output<span class="w"> </span>outputs/solver-default
+</pre></div>
+</div>
+<p>The option fragment is a standalone benchmark configuration; no robot XML is edited. <code class="docutils literal notranslate"><span class="pre">--friction</span> <span class="pre">original</span></code> retains the benchmark friction constraint. The common replay entry supports <code class="docutils literal notranslate"><span class="pre">--engine</span> <span class="pre">newton</span></code> and <code class="docutils literal notranslate"><span class="pre">--engine</span> <span class="pre">mjlab</span></code> when the matching optional environment is provided. It checks requested options instead of quietly disabling unsupported features. Optional runtime versions and limitations are documented in <a class="reference internal" href="../reference/backends.html"><span class="std std-doc">the environment guide</span></a>.</p>
+</section>
+<section id="release-timing">
+<h3>Release timing<a class="headerlink" href="#release-timing" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation<span class="w"> </span>motorfit<span class="w"> </span>release-replay<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>data/rs05/formal-v3/manifest.json<span class="w"> </span>--scenes<span class="w"> </span>data/rs05/scenes/release<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output<span class="w"> </span>outputs/release-alignment
+</pre></div>
+</div>
+<p>This builds a small C++ helper with the installed MuJoCo library and runs the 27 release records at 62.5 microseconds for the processed enable flag, STOP send and two acknowledgments. Use <code class="docutils literal notranslate"><span class="pre">--record</span> <span class="pre">&lt;id&gt;</span></code> for a single record; <code class="docutils literal notranslate"><span class="pre">--dt</span> <span class="pre">0.000125</span></code> or <code class="docutils literal notranslate"><span class="pre">0.00025</span></code> for timestep comparisons. Bus-clock variants are available through <code class="docutils literal notranslate"><span class="pre">--cases</span> <span class="pre">stop_tx_bus</span> <span class="pre">stop_ack1_bus</span> <span class="pre">stop_ack2_bus</span></code>. The helper splits an integration step at the event without an extra command-delay shift. The model and measured trajectories stay fixed. These times are sensitivity assumptions, not measurements of the power stage’s actual current decay.</p>
+</section>
+<section id="render-saved-trajectories">
+<h3>Render saved trajectories<a class="headerlink" href="#render-saved-trajectories" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">MUJOCO_GL</span><span class="o">=</span>egl<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>--extra<span class="w"> </span>simulation<span class="w"> </span>python<span class="w"> </span>scripts/render_replay.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>data/rs05/formal-v3/manifest.json<span class="w"> </span>--source<span class="w"> </span>data/rs05/results/replay/cad-baseline<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--assets<span class="w"> </span>data/rs05/assets/bench<span class="w"> </span>--output<span class="w"> </span>outputs/video<span class="w"> </span>--grams<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--trajectory<span class="w"> </span>lift_and_drop<span class="w"> </span>--preview<span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+<p>The renderer uses saved states from all three backends and a common camera. Omitting <code class="docutils literal notranslate"><span class="pre">--preview</span></code> writes a full video; ffmpeg is required. With all loads/trajectories selected, <code class="docutils literal notranslate"><span class="pre">--concat</span></code> also builds three full-length compilations. The renderer has a portable bundled Matplotlib font fallback; <code class="docutils literal notranslate"><span class="pre">--font</span></code> accepts a preferred font file. The provided Chinese videos remain the original validated outputs and are not relabelled as timing-corrected runs.</p>
+</section>
+</section>
+<section id="complete-replay-videos">
+<h2>Complete replay videos<a class="headerlink" href="#complete-replay-videos" title="Link to this heading">#</a></h2>
+<p>The separate archive contains these files under <code class="docutils literal notranslate"><span class="pre">data/rs05/results/media/</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rs05_100g_all_profiles_complete.mp4</span></code> — 118.000 s</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rs05_200g_all_profiles_complete.mp4</span></code> — 118.033 s</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rs05_500g_all_profiles_complete.mp4</span></code> — 118.000 s</p></li>
+</ul>
+<p>Each compilation contains four 20-second clips and a roughly 38-second long sweep, in full at original speed. <a class="reference internal" href="#how-replay-duration-is-calculated">Timing details</a> explain the experiment windows and frame rounding. Videos are available in the separate full data archive.</p>
+<p>The three panels render saved MuJoCo, Newton and mjlab states with a shared camera, time axis and measured position reference. They show the CAD baseline study, rather than the later release-timing sensitivity runs. They are rendered comparisons, not three native simulator UI captures.</p>
+</section>
+<section id="how-replay-duration-is-calculated">
+<h2>How replay duration is calculated<a class="headerlink" href="#how-replay-duration-is-calculated" title="Link to this heading">#</a></h2>
+<p>The renderer uses the saved processed samples at their recorded <code class="docutils literal notranslate"><span class="pre">dt</span></code>, at 1× speed:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>source duration = number of processed samples × dt
+video frames    = ceil(source duration × 30 fps)
+video duration  = video frames / 30 fps
+</pre></div>
+</div>
+<p>The last sample is held through its final display interval. Video duration is rounded up to a whole frame. Videos cover the complete processed record; no fixed 20-second crop is applied. Position interpolation is for display only and does not rerun the simulator.</p>
+<p>The 18 supplied videos were checked against their metadata and container frame counts:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Load</p></th>
+<th class="head text-right"><p>Four ordinary clips</p></th>
+<th class="head text-right"><p>Long sweep</p></th>
+<th class="head text-right"><p>Five-clip compilation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>100 g</p></td>
+<td class="text-right"><p>20.000 s each</p></td>
+<td class="text-right"><p>38.000 s</p></td>
+<td class="text-right"><p>118.000 s</p></td>
+</tr>
+<tr class="row-odd"><td><p>200 g</p></td>
+<td class="text-right"><p>20.000 s each</p></td>
+<td class="text-right"><p>38.033 s</p></td>
+<td class="text-right"><p>118.033 s</p></td>
+</tr>
+<tr class="row-even"><td><p>500 g</p></td>
+<td class="text-right"><p>20.000 s each</p></td>
+<td class="text-right"><p>38.000 s</p></td>
+<td class="text-right"><p>118.000 s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The 200 g long recording has 3,801 processed samples at 0.01 s: a 38.01 s display window, rounded to 1,141 frames. The other long clips have 3,800 processed samples and 1,140 frames. The compilation concatenates all five full clips. See the <a class="reference internal" href="#"><span class="std std-doc">RS05 study</span></a> for video links and the scope of the predictions shown.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../reference/protocols.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Protocols</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="rs05-fixture.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">RS05 fixture</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experiment">Experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#original-acquisition-format">Original acquisition format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rs05-reference-acquisition">RS05 reference acquisition</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-and-limits">Results and limits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-reproduce">What to reproduce</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-validation">Advanced validation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cad-and-solver-options">CAD and solver options</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#release-timing">Release timing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#render-saved-trajectories">Render saved trajectories</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-replay-videos">Complete replay videos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-replay-duration-is-calculated">How replay duration is calculated</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, MotorFit contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
