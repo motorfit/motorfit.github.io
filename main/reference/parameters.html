@@ -1,0 +1,640 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Models and parameters &#8212; MotorFit</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1c815793" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=63867087"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fc97db16"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/parameters';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = '/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="canonical" href="https://motorfit.github.io/main/reference/parameters.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Supported motors" href="motors.html" />
+    <link rel="prev" title="Evaluate the model" href="../guide/validation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">MotorFit</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/motorfit/motorfit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/motorfit/motorfit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links" aria-label="Documentation navigation">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/workflow.html">Workflow</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Evaluate</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motors.html">Motors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">Protocols</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../development/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/contributing.html">Contributing</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Models and parameters</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="models-and-parameters">
+<h1>Models and parameters<a class="headerlink" href="#models-and-parameters" title="Link to this heading">#</a></h1>
+<p>MotorFit fits a mechanical actuator model from position trajectories. The fixture
+geometry and controller gains are inputs; the optimizer adjusts model parameters
+so simulated position matches the recordings.</p>
+<section id="the-controller-and-pendulum">
+<h2>The controller and pendulum<a class="headerlink" href="#the-controller-and-pendulum" title="Link to this heading">#</a></h2>
+<p>RobStride and Damiao use the same torque-MIT model in the fitter:</p>
+<div class="math notranslate nohighlight">
+\[
+\tau_\mathrm{nom}=\operatorname{clip}\!\left[
+K_p\bigl(q_d(t-d)-q\bigr)+K_d(\dot q_d-\dot q)+\tau_\mathrm{ff},\;
+\tau_\min,\tau_\max\right],
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\tau_\mathrm{motor}=e\,r\,\tau_\mathrm{nom}.
+\]</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">e</span></code> is the recorded torque-enable state, <code class="docutils literal notranslate"><span class="pre">r</span></code> is <code class="docutils literal notranslate"><span class="pre">torque_ratio</span></code>, and <code class="docutils literal notranslate"><span class="pre">d</span></code> is
+<code class="docutils literal notranslate"><span class="pre">command_delay</span></code>. The limits come from the recorded motor profile. Encoded gains,
+velocity target and feedforward torque are used when present, preserving
+quantization offsets even for a requested zero.</p>
+<p>Only the position target receives the identified delay. Disabling torque acts
+immediately in this model. The delay is fitted from motion; it is not a direct
+measurement of CAN round-trip time or power-stage shutdown.</p>
+<p>For the pendulum, total inertia is the known fixture inertia plus <code class="docutils literal notranslate"><span class="pre">armature</span></code>.
+Gravity depends on the measured mass moment and <code class="docutils literal notranslate"><span class="pre">q</span> <span class="pre">+</span> <span class="pre">q_offset</span></code>.
+The <a class="reference internal" href="../guide/configuration.html#measure-the-fixture"><span class="std std-ref">setup guide</span></a> gives the fixture
+equations and units.</p>
+</section>
+<section id="m1-parameters">
+<h2>M1 parameters<a class="headerlink" href="#m1-parameters" title="Link to this heading">#</a></h2>
+<p>M1 has six fitted parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Unit</p></th>
+<th class="head"><p>Meaning</p></th>
+<th class="head"><p>Search interval</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">torque_ratio</span></code></p></td>
+<td><p>dimensionless</p></td>
+<td><p>Multiplier from nominal command torque to effective motor torque</p></td>
+<td><p>0.1–3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">armature</span></code></p></td>
+<td><p>kg·m²</p></td>
+<td><p>Added motor/drive inertia at the modeled output joint</p></td>
+<td><p>0–0.02</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">q_offset</span></code></p></td>
+<td><p>rad</p></td>
+<td><p>Residual angular offset in the fixture’s gravity model</p></td>
+<td><p>−0.1–0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">command_delay</span></code></p></td>
+<td><p>s</p></td>
+<td><p>Delay applied to the position command</p></td>
+<td><p>0–0.05</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">friction_base</span></code></p></td>
+<td><p>N·m</p></td>
+<td><p>Coulomb-like friction limit</p></td>
+<td><p>0–0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">friction_viscous</span></code></p></td>
+<td><p>N·m·s/rad</p></td>
+<td><p>Speed-proportional friction coefficient</p></td>
+<td><p>0–1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These are the current optimizer search intervals, not measured hardware limits.
+The MotorFit adapter defines the first two; the pinned BAM model defines the
+remaining four.</p>
+<p>For M1, the resisting-torque budget is
+<code class="docutils literal notranslate"><span class="pre">friction_base</span> <span class="pre">+</span> <span class="pre">friction_viscous</span> <span class="pre">×</span> <span class="pre">abs(speed)</span></code>. BAM clips the applied friction to
+the torque needed to stop the joint in a step. This permits sticking near zero
+speed instead of forcing a sign-based friction torque through a velocity reversal.</p>
+<p>The parameters describe the observed system together. For example, an incorrect
+tip inertia can change the fitted <code class="docutils literal notranslate"><span class="pre">armature</span></code> or torque scale. <code class="docutils literal notranslate"><span class="pre">torque_ratio</span></code> does
+not independently identify winding torque constant, resistance, voltage saturation
+or torque-sensor calibration.</p>
+</section>
+<section id="model-families">
+<h2>Model families<a class="headerlink" href="#model-families" title="Link to this heading">#</a></h2>
+<p>All six families include the controller, inertia, offset, delay and viscous term.
+They differ in the friction model:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Family</p></th>
+<th class="head"><p>Added friction behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">m1</span></code></p></td>
+<td><p>Constant Coulomb-like friction</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">m2</span></code></p></td>
+<td><p>M1 plus a Stribeck increase near zero speed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">m3</span></code></p></td>
+<td><p>M1 plus friction depending on load torque</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">m4</span></code></p></td>
+<td><p>Load dependence combined with Stribeck behavior</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">m5</span></code></p></td>
+<td><p>Separate motor-side and external-side load terms, with Stribeck behavior</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">m6</span></code></p></td>
+<td><p>M5 plus quadratic load terms in the supported opposing-torque regime</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Stribeck models add <code class="docutils literal notranslate"><span class="pre">friction_stribeck</span></code>, the characteristic velocity
+<code class="docutils literal notranslate"><span class="pre">dtheta_stribeck</span></code>, and shape exponent <code class="docutils literal notranslate"><span class="pre">alpha</span></code>. Load-dependent families add their
+corresponding load coefficients. The exact parameter list is saved in each model
+JSON; the implementation is in BAM’s <code class="docutils literal notranslate"><span class="pre">bam/model.py</span></code>.</p>
+<p>More parameters require data that distinguishes their effects. Compare families
+on the same validation runs rather than selecting the lowest training score.</p>
+</section>
+<section id="reading-a-saved-model">
+<h2>Reading a saved model<a class="headerlink" href="#reading-a-saved-model" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">model.json</span></code> includes <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">actuator</span></code>, <code class="docutils literal notranslate"><span class="pre">motor_spec</span></code>, the parameter values and,
+for new fits, an <code class="docutils literal notranslate"><span class="pre">identification</span></code> score object. Load it through MotorFit so that the
+saved motor definition is registered with BAM:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">motorfit.identification.bam</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_model</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s2">"data/my-motor/selected/model.json"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parameter</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Editing a current profile TOML does not change the snapshot saved with an existing
+model. <a class="reference internal" href="data.html"><span class="std std-doc">Data formats</span></a> describes the related recording fields.</p>
+</section>
+<section id="using-the-model-in-simulation">
+<h2>Using the model in simulation<a class="headerlink" href="#using-the-model-in-simulation" title="Link to this heading">#</a></h2>
+<p>The included M1 pendulum adapters map three mechanical parameters directly:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Identified value</p></th>
+<th class="head"><p>MuJoCo joint property</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">armature</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">armature</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">friction_base</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">frictionloss</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">friction_viscous</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">damping</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">torque_ratio</span></code> and <code class="docutils literal notranslate"><span class="pre">command_delay</span></code> belong in the controller calculation. Reproduce
+the command clamp, scaling and delay in the same order as the equations above.
+The pendulum adapter represents <code class="docutils literal notranslate"><span class="pre">q_offset</span></code> through the hinge reference; in a robot,
+first relate this bench offset to the robot’s own joint coordinate convention.</p>
+<p>Changing those three XML attributes alone does not reproduce the entire model.
+MotorFit generates replay scenes for the pendulum and leaves robot integration to
+the caller. Compare the integrated controller against held-out recordings before
+using it for a wider operating range.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../guide/validation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Evaluate the model</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="motors.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Supported motors</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-controller-and-pendulum">The controller and pendulum</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#m1-parameters">M1 parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-families">Model families</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-a-saved-model">Reading a saved model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-model-in-simulation">Using the model in simulation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, MotorFit contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Identification &#8212; MotorFit</title>
+    <title>Fit a model &#8212; MotorFit</title>
   
   
   
@@ -56,8 +56,8 @@
     <link rel="canonical" href="https://motorfit.github.io/main/guide/identification.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Validation" href="validation.html" />
-    <link rel="prev" title="Recording" href="acquisition.html" />
+    <link rel="next" title="Evaluate the model" href="validation.html" />
+    <link rel="prev" title="Record motion" href="acquisition.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -267,23 +267,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="acquisition.html">Recording</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acquisition.html">Record</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -329,7 +332,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Identification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Fit a model</span></li>
   </ul>
 </nav>
 </div>
@@ -346,70 +349,108 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="identification">
-<h1>Identification<a class="headerlink" href="#identification" title="Link to this heading">#</a></h1>
-<p>MotorFit uses the pinned, unchanged <a class="reference external" href="https://github.com/Rhoban/bam">Rhoban BAM</a>
-submodule for M1–M6 actuator models, resampling, simulation and optimization.
-Local adapters supply the controller law, recorded inputs and measured fixture.</p>
-<p>Before fitting, finish the <a class="reference internal" href="../getting-started/workflow.html"><span class="std std-doc">experiment plan</span></a>,
-check recording completion and keep training, validation and final-test runs separate.</p>
-<section id="process-recordings">
-<h2>Process recordings<a class="headerlink" href="#process-recordings" title="Link to this heading">#</a></h2>
-<p>Process each split independently. Choose <code class="docutils literal notranslate"><span class="pre">dt</span></code> from the recorded timing and the
-bandwidth needed for the study:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>process<span class="w"> </span><span class="se">\</span>
+  <section class="tex2jax_ignore mathjax_ignore" id="fit-a-model">
+<h1>Fit a model<a class="headerlink" href="#fit-a-model" title="Link to this heading">#</a></h1>
+<p>Start with reviewed recordings arranged under <code class="docutils literal notranslate"><span class="pre">data/my-motor/raw/train/</span></code> and
+<code class="docutils literal notranslate"><span class="pre">data/my-motor/raw/validation/</span></code>. This guide resamples them, fits an M1 candidate,
+and evaluates it before choosing a final model. No hardware is used.</p>
+<section id="process-each-split">
+<h2>1. Process each split<a class="headerlink" href="#process-each-split" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>process<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--raw<span class="w"> </span>data/my-motor/raw/train<span class="w"> </span>--out<span class="w"> </span>data/my-motor/processed/train<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.01
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>process<span class="w"> </span><span class="se">\</span>
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>process<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--raw<span class="w"> </span>data/my-motor/raw/validation<span class="w"> </span>--out<span class="w"> </span>data/my-motor/processed/validation<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.01
 </pre></div>
 </div>
-<p>Keep original raw data alongside the processed inputs. Recordings in one fit must
-carry a consistent motor snapshot.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--dt</span></code> is the processed sample interval in seconds; <code class="docutils literal notranslate"><span class="pre">0.01</span></code> gives 100 Hz. Choose it
+from the measured timing and motion bandwidth. A smaller interval interpolates
+more points but does not create new measurements.</p>
+<p><code class="docutils literal notranslate"><span class="pre">process</span></code> finds nested <code class="docutils literal notranslate"><span class="pre">raw.json</span></code> files and writes a flat directory of processed
+JSON logs. It retains the recording metadata and linearly interpolates numeric
+sample fields. The torque-enable field is interpolated and thresholded at 0.5;
+its transition time is therefore approximate. Keep the raw capture for precise
+release-event analysis.</p>
+<p>Use a new or empty processed directory when changing the run selection or timestep:
+old files are not removed automatically. Keep inspection JSON and summaries out of
+these directories; <code class="docutils literal notranslate"><span class="pre">fit</span></code> treats every top-level <code class="docutils literal notranslate"><span class="pre">.json</span></code> as a recording.</p>
 </section>
-<section id="fit-a-candidate">
-<h2>Fit a candidate<a class="headerlink" href="#fit-a-candidate" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>fit<span class="w"> </span><span class="se">\</span>
+<section id="check-the-training-inputs">
+<h2>2. Check the training inputs<a class="headerlink" href="#check-the-training-inputs" title="Link to this heading">#</a></h2>
+<p>All logs in a fit must have the same complete <code class="docutils literal notranslate"><span class="pre">motor_spec</span></code> and the same <code class="docutils literal notranslate"><span class="pre">dt</span></code>.
+Loads and controller gains can differ and are read from each recording.</p>
+<p><strong>The batch fitter uses only as many samples as the shortest training log.</strong>
+Keep training durations consistent or deliberately prepare matched windows.
+A long recording mixed with short recordings does not contribute its extra tail
+to the fit. Later <code class="docutils literal notranslate"><span class="pre">--eval</span></code> runs evaluate the full individual logs.</p>
+</section>
+<section id="fit-the-first-candidate">
+<h2>3. Fit the first candidate<a class="headerlink" href="#fit-the-first-candidate" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>data/my-motor/candidates<span class="w"> </span>data/my-motor/selected<span class="w"> </span>data/my-motor/results
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>fit<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--logdir<span class="w"> </span>data/my-motor/processed/train<span class="w"> </span>--model<span class="w"> </span>m1<span class="w"> </span>--trials<span class="w"> </span><span class="m">1000</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--output<span class="w"> </span>data/my-motor/candidates/m1.json
+<span class="w">  </span>--output<span class="w"> </span>data/my-motor/candidates/m1-run01.json
 </pre></div>
 </div>
-<p>This fits only the supplied directory. The trial count is an example budget;
-compare candidate families and repeated runs on the declared validation data.
-Record seeds, options and the selection rule. <code class="docutils literal notranslate"><span class="pre">motorfit</span> <span class="pre">fit</span> <span class="pre">--help</span></code> lists the
-supported fitting flags. Choose a new output path rather than overwriting a
-selected model or the bundled fixture.</p>
+<p>The optimizer minimizes position mean absolute error. It periodically saves the
+best candidate and prints its score in radians. The final JSON includes:</p>
+<ul class="simple">
+<li><p>The model family and fitted parameters.</p></li>
+<li><p>The complete motor specification copied from the recordings.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">identification.training_mae_rad</span></code>, the best training score.</p></li>
+</ul>
+<p>The parent output directory must already exist. Use a fresh filename: fitting
+opens the specified file for writing. If interrupted after a completed trial,
+MotorFit saves the best completed candidate.</p>
+<p>A budget of 1,000 trials is a starting example, not a convergence guarantee. Repeat
+fits and check whether validation error and parameters are stable. The current CLI
+does not expose an optimizer-seed option; save the source revision, input selection,
+arguments and each output when comparing runs.</p>
 </section>
 <section id="evaluate-and-inspect">
 <h2>Evaluate and inspect<a class="headerlink" href="#evaluate-and-inspect" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>fit<span class="w"> </span><span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>fit<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--logdir<span class="w"> </span>data/my-motor/processed/validation<span class="w"> </span>--eval<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--output<span class="w"> </span>data/my-motor/candidates/m1.json
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>plot<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output<span class="w"> </span>data/my-motor/candidates/m1-run01.json
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>plot<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--logdir<span class="w"> </span>data/my-motor/processed/validation<span class="w"> </span>--sim<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--params<span class="w"> </span>data/my-motor/candidates/m1.json
+<span class="w">  </span>--params<span class="w"> </span>data/my-motor/candidates/m1-run01.json
 </pre></div>
 </div>
-<p>Evaluation loads the fixed candidate. Inspect residuals across trajectories,
-loads and gains before selecting it. Freeze the selected parameter file and input
-hashes, then evaluate independent final-test recordings using <a class="reference internal" href="validation.html"><span class="std std-doc">Validation</span></a>.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">--eval</span></code>, <code class="docutils literal notranslate"><span class="pre">--output</span></code> names the existing model to <strong>read</strong>. No fitting occurs.
+The printed <code class="docutils literal notranslate"><span class="pre">Score</span></code> is the mean of the position MAEs calculated separately for
+each complete log; every log has equal weight. <code class="docutils literal notranslate"><span class="pre">plot</span> <span class="pre">--sim</span></code> opens Matplotlib plots
+with BAM predictions overlaid on the measurements.</p>
+<p>Inspect reversals, fast motion, release and final settling. Two models with similar
+average error can behave very differently in those windows.</p>
 </section>
-<section id="interpret-the-model">
-<h2>Interpret the model<a class="headerlink" href="#interpret-the-model" title="Link to this heading">#</a></h2>
-<p>For torque-MIT recordings, the nominal command law is:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Kp * (delayed_goal - q) + Kd * (goal_speed - dq) + feedforward
+<section id="compare-model-families">
+<h2>Compare model families<a class="headerlink" href="#compare-model-families" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="../reference/parameters.html#model-families"><span class="std std-ref">Parameters</span></a> describes M1–M6. To test an
+additional friction model, repeat the fit with a different <code class="docutils literal notranslate"><span class="pre">--model</span></code> and output
+filename, then evaluate it on the <strong>same</strong> validation recordings. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>fit<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--logdir<span class="w"> </span>data/my-motor/processed/train<span class="w"> </span>--model<span class="w"> </span>m2<span class="w"> </span>--trials<span class="w"> </span><span class="m">1000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output<span class="w"> </span>data/my-motor/candidates/m2-run01.json
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>plot<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--logdir<span class="w"> </span>data/my-motor/processed/validation<span class="w"> </span>--sim<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--params<span class="w"> </span>data/my-motor/candidates/m1-run01.json<span class="w"> </span>data/my-motor/candidates/m2-run01.json
 </pre></div>
 </div>
-<p>The nominal output is clamped to the protocol torque range; <code class="docutils literal notranslate"><span class="pre">torque_ratio</span></code> maps it
-to effective torque. Recorded quantized gains and encoded velocity/feedforward
-zeros are retained. Only the position goal receives the identified fractional
-delay; disabling torque is a separate event.</p>
-<p>This model does not independently identify winding resistance, electrical torque constant,
-current-loop dynamics or the calibration of a torque sensor.</p>
-<p>Parameter JSON includes a complete motor snapshot. Python callers should use
-<code class="docutils literal notranslate"><span class="pre">motorfit.identification.bam.load_model(path)</span></code> so a later TOML edit cannot reinterpret
-a saved model. The <a class="reference internal" href="../case-studies/rs05.html"><span class="std std-doc">RS05 study</span></a> documents one completed
-selection and its limitations; its three-record fixture is an installation sample,
-not enough data to reproduce the full model-selection study.</p>
+<p>Prefer the simpler model when the additional terms do not improve the validation
+behaviors that matter. A parameter repeatedly reaching its search bound calls for
+checking units, fixture properties and data coverage before changing that bound.</p>
+<p>If a parameter has been measured independently, <code class="docutils literal notranslate"><span class="pre">--set</span></code> can hold it fixed. The
+<a class="reference internal" href="../reference/commands.html#fitting-options"><span class="std std-ref">command reference</span></a> gives the syntax.</p>
+</section>
+<section id="save-the-selected-model">
+<h2>Save the selected model<a class="headerlink" href="#save-the-selected-model" title="Link to this heading">#</a></h2>
+<p>After comparing candidates, copy the chosen file to a stable study location:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>data/my-motor/candidates/m1-run01.json<span class="w"> </span>data/my-motor/selected/model.json
+</pre></div>
+</div>
+<p>Use the actual chosen candidate if it differs. Record the selection reason and
+validation scores beside it. Continue with <a class="reference internal" href="validation.html"><span class="std std-doc">Evaluate the model</span></a>
+using the final-test recordings.</p>
 </section>
 </section>
 
@@ -429,7 +470,7 @@ not enough data to reproduce the full model-selection study.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Recording</p>
+        <p class="prev-next-title">Record motion</p>
       </div>
     </a>
     <a class="right-next"
@@ -437,7 +478,7 @@ not enough data to reproduce the full model-selection study.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Validation</p>
+        <p class="prev-next-title">Evaluate the model</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -460,10 +501,12 @@ not enough data to reproduce the full model-selection study.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#process-recordings">Process recordings</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-a-candidate">Fit a candidate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#process-each-split">1. Process each split</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check-the-training-inputs">2. Check the training inputs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-the-first-candidate">3. Fit the first candidate</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-and-inspect">Evaluate and inspect</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpret-the-model">Interpret the model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-model-families">Compare model families</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-the-selected-model">Save the selected model</a></li>
 </ul>
   </nav></div>
 

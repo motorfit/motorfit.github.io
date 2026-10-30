@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Motor support &#8212; MotorFit</title>
+    <title>Supported motors &#8212; MotorFit</title>
   
   
   
@@ -57,7 +57,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Trajectories" href="trajectories.html" />
-    <link rel="prev" title="Validation" href="../guide/validation.html" />
+    <link rel="prev" title="Models and parameters" href="parameters.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -267,23 +267,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -329,7 +332,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Motor support</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Supported motors</span></li>
   </ul>
 </nav>
 </div>
@@ -346,61 +349,128 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="motor-support">
-<h1>Motor support<a class="headerlink" href="#motor-support" title="Link to this heading">#</a></h1>
-<p>MotorFit implements native SocketCAN acquisition for <strong>RobStride and Damiao</strong>, with saved command/feedback evidence and adapters for BAM identification.</p>
-<section id="native-support">
-<h2>Native support<a class="headerlink" href="#native-support" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="supported-motors">
+<h1>Supported motors<a class="headerlink" href="#supported-motors" title="Link to this heading">#</a></h1>
+<p>MotorFit records <strong>RobStride and Damiao</strong> motors through Linux SocketCAN. Choose a
+profile matching both the motor model and its firmware protocol, then use it in a
+<a class="reference internal" href="../guide/configuration.html"><span class="std std-doc">bench setup</span></a>.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Family</p></th>
-<th class="head"><p>Shipped profile identifiers</p></th>
-<th class="head"><p>Acquisition → BAM</p></th>
-<th class="head"><p>Hardware evidence</p></th>
+<th class="head"><p>Supported protocol</p></th>
+<th class="head"><p>Starting setup</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>RobStride</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">rs00</span></code>, <code class="docutils literal notranslate"><span class="pre">rs01</span></code>, <code class="docutils literal notranslate"><span class="pre">rs02</span></code>, <code class="docutils literal notranslate"><span class="pre">rs03</span></code>, <code class="docutils literal notranslate"><span class="pre">rs04</span></code>, <code class="docutils literal notranslate"><span class="pre">rs05</span></code>, <code class="docutils literal notranslate"><span class="pre">rs06</span></code></p></td>
-<td><p>Implemented for private extended CAN</p></td>
-<td><p>RS05 reference study; other profiles unverified on hardware</p></td>
+<td><p>Manufacturer private protocol over extended CAN</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">configs/setups/rs05_pendulum.toml</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Damiao</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">3507</span></code>, <code class="docutils literal notranslate"><span class="pre">4310</span></code>, <code class="docutils literal notranslate"><span class="pre">4310p</span></code>, <code class="docutils literal notranslate"><span class="pre">4340</span></code>, <code class="docutils literal notranslate"><span class="pre">4340p</span></code>, <code class="docutils literal notranslate"><span class="pre">4340_v20</span></code>, <code class="docutils literal notranslate"><span class="pre">6006</span></code>, <code class="docutils literal notranslate"><span class="pre">8006</span></code>, <code class="docutils literal notranslate"><span class="pre">8009</span></code>, <code class="docutils literal notranslate"><span class="pre">10010l</span></code>, <code class="docutils literal notranslate"><span class="pre">10010</span></code>, <code class="docutils literal notranslate"><span class="pre">h3510</span></code>, <code class="docutils literal notranslate"><span class="pre">g6215</span></code>, <code class="docutils literal notranslate"><span class="pre">h6220</span></code>, <code class="docutils literal notranslate"><span class="pre">jh11</span></code>, <code class="docutils literal notranslate"><span class="pre">6248p</span></code></p></td>
-<td><p>Implemented for MIT over SocketCAN</p></td>
-<td><p>Offline protocol and pipeline tests only</p></td>
+<td><p>MIT control over standard CAN</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">configs/setups/dm4310_pendulum.toml</span></code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>The Damiao identifiers correspond to DM3507, DM4310, DM4310P, DM4340, DM4340P, DM4340X, DM6006, DM8006, DM8009, DM10010L, DM10010, H3510, G6215, H6220, JH11 and 6248P. Profile <code class="docutils literal notranslate"><span class="pre">4340_v20</span></code> is the existing identifier for the <strong>4340X</strong> template; do not substitute the standard 4340 mapping.</p>
-<p>Profiles define protocol encoding ranges, not rated continuous torque, commissioned limits or identified physical parameters. Match the actual model and firmware, measure the fixture, and identify each mounted device. Both families use classic CAN. Serial/DM_Device bridges and alternative RobStride CiA402/MIT firmware protocols are not implemented here.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>motors
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>motors<span class="w"> </span>--json
+<p>Both drivers support feedback reading, register inspection, software-zero capture
+and trajectory recording. Their recordings use the same fitting workflow.</p>
+<section id="robstride-profiles">
+<h2>RobStride profiles<a class="headerlink" href="#robstride-profiles" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">configs/motors/robstride/</span></code> directory contains:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Models</p></th>
+<th class="head"><p>Profile files</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RS00, RS01, RS02</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rs00.toml</span></code>, <code class="docutils literal notranslate"><span class="pre">rs01.toml</span></code>, <code class="docutils literal notranslate"><span class="pre">rs02.toml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>RS03, RS04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rs03.toml</span></code>, <code class="docutils literal notranslate"><span class="pre">rs04.toml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>RS05, RS06</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rs05.toml</span></code>, <code class="docutils literal notranslate"><span class="pre">rs06.toml</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For example, an RS06 setup uses <code class="docutils literal notranslate"><span class="pre">../motors/robstride/rs06.toml</span></code> when the setup is
+under <code class="docutils literal notranslate"><span class="pre">configs/local/</span></code>. Each model has its own position, velocity, torque and gain
+encoding ranges. Do not substitute the RS05 profile merely because the wire format
+is shared.</p>
+<p>The RobStride driver targets the private extended-CAN protocol. Alternative
+CANopen or MIT firmware layouts require a different adapter.</p>
+</section>
+<section id="damiao-profiles">
+<h2>Damiao profiles<a class="headerlink" href="#damiao-profiles" title="Link to this heading">#</a></h2>
+<p>Profiles live in <code class="docutils literal notranslate"><span class="pre">configs/motors/damiao/</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Profile</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DM3507</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3507.toml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>DM4310 / DM4310P</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4310.toml</span></code> / <code class="docutils literal notranslate"><span class="pre">4310p.toml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>DM4340 / DM4340P</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4340.toml</span></code> / <code class="docutils literal notranslate"><span class="pre">4340p.toml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>DM4340X</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4340_v20.toml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>DM6006</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6006.toml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>DM8006 / DM8009</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8006.toml</span></code> / <code class="docutils literal notranslate"><span class="pre">8009.toml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>DM10010L / DM10010</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10010l.toml</span></code> / <code class="docutils literal notranslate"><span class="pre">10010.toml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>H3510 / G6215 / H6220</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">h3510.toml</span></code> / <code class="docutils literal notranslate"><span class="pre">g6215.toml</span></code> / <code class="docutils literal notranslate"><span class="pre">h6220.toml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>JH11 / 6248P</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jh11.toml</span></code> / <code class="docutils literal notranslate"><span class="pre">6248p.toml</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">4340_v20</span></code> is the repository’s profile name for <strong>DM4340X</strong>. It is distinct from
+the standard DM4340 profile. Before enabling, the driver checks the device’s PMAX,
+VMAX and TMAX against the selected profile.</p>
+<p>Serial bridges and the DM_Device SDK transport are not implemented. Use a
+SocketCAN-compatible adapter.</p>
+</section>
+<section id="what-a-profile-contains">
+<h2>What a profile contains<a class="headerlink" href="#what-a-profile-contains" title="Link to this heading">#</a></h2>
+<p>A profile stores the model name, family and command-encoding ranges in SI units.
+These ranges describe the protocol; they are not identified friction, inertia or
+rated continuous-torque values. Physical parameters come from an experiment and
+are saved separately in <code class="docutils literal notranslate"><span class="pre">model.json</span></code>.</p>
+<p>List the installed profiles and validation coverage with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>motors
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>motors<span class="w"> </span>--json
 </pre></div>
 </div>
 </section>
-<section id="damiao-acquisition">
-<h2>Damiao acquisition<a class="headerlink" href="#damiao-acquisition" title="Link to this heading">#</a></h2>
-<p>Copy <a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/configs/setups/dm4310_pendulum.toml"><code class="docutils literal notranslate"><span class="pre">dm4310_pendulum.toml</span></code></a> in the same directory. Select a profile from <a class="reference external" href="https://github.com/motorfit/motorfit/tree/main/configs/motors/damiao"><code class="docutils literal notranslate"><span class="pre">configs/motors/damiao</span></code></a>, then set the actual fixture, supply, CAN address, feedback address and trajectory. The example gains and fixture are placeholders for a measured assembly.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>inspect<span class="w"> </span>--setup<span class="w"> </span>configs/setups/dm4310_pendulum.toml<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--out<span class="w"> </span>outputs/dm4310-inspection.json
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>zero<span class="w"> </span>--setup<span class="w"> </span>configs/setups/dm4310_pendulum.toml<span class="w"> </span>--angle<span class="w"> </span><span class="m">0</span>
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>record<span class="w"> </span>--setup<span class="w"> </span>configs/setups/dm4310_pendulum.toml<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--out<span class="w"> </span>outputs/dm4310-run
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>process<span class="w"> </span>--raw<span class="w"> </span>outputs/dm4310-run<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--out<span class="w"> </span>outputs/dm4310-processed<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.01
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">zero</span></code> assumes the pendulum has been placed at the given physical angle. It stores a software offset. <code class="docutils literal notranslate"><span class="pre">record</span></code> executes motion. Follow <a class="reference internal" href="../guide/identification.html"><span class="std std-doc">identification</span></a> to collect multiple runs, separate train/validation/test data, and fit the recorded model. The RS05 frozen parameters must not be reused as identified Damiao parameters.</p>
-<p>Before enabling, the driver stops the motor and checks <strong>PMAX/VMAX/TMAX</strong> against the profile. A mismatch aborts. It verifies MIT mode and watchdog register writes through acknowledgements and readbacks. The driver writes the TIMEOUT register as <code class="docutils literal notranslate"><span class="pre">round(watchdog_ms</span> <span class="pre">×</span> <span class="pre">20)</span></code> ticks. No firmware zero, fault-clear or persistent-save command is issued.</p>
-<p>Position uses 16-bit encoding; velocity, torque, Kp and Kd use 12 bits. The recorded <code class="docutils literal notranslate"><span class="pre">*_encoded</span></code>, <code class="docutils literal notranslate"><span class="pre">goal_speed</span></code> and <code class="docutils literal notranslate"><span class="pre">feedforward_torque</span></code> values preserve their quantized values, including nonzero representations of nominal zero. BAM uses these values. Wire status is retained as <code class="docutils literal notranslate"><span class="pre">status_code</span></code>; <code class="docutils literal notranslate"><span class="pre">mode</span></code> is normalized to 0=disabled, 2=enabled. <code class="docutils literal notranslate"><span class="pre">load</span></code> is nominal protocol torque in Nm, not an independently calibrated torque measurement.</p>
-<p>Each transaction drains queued frames, logs all frames and accepts only the configured feedback CAN ID and motor nibble. A fault, unexpected enable state or missing response aborts recording and attempts disable. As in RobStride, the protocol has no sequence number; this does not prove that a delayed packet cannot arrive after a new request. The host sampling timestamp is reception time, not a motor-side measurement clock.</p>
-</section>
-<section id="sources-and-validation">
-<h2>Sources and validation<a class="headerlink" href="#sources-and-validation" title="Link to this heading">#</a></h2>
-<p>See the <a class="reference internal" href="protocols.html"><span class="std std-doc">manufacturer protocol references</span></a> for framing, register access and firmware control modes. The source links in the profiles point to protocol documentation. Profile numbers are encoding templates and must be checked against the mounted device; they are not identified parameters or evidence of hardware validation. RS01/02/05/06 keep their existing pinned manuals and 16-bit codec. RS00/03/04 retain their current mapping ranges and model-specific gain limits, pending firmware/hardware verification.</p>
-<p>Tests exercise RobStride and Damiao frame packing, addressing, register readback, range mismatch, missing replies, fault/disable handling, interruption and the full offline BAM process/fit/load path. Only RS05 has recorded hardware validation; the remaining profiles require commissioning on the mounted device.</p>
+<section id="validation-coverage">
+<h2>Validation coverage<a class="headerlink" href="#validation-coverage" title="Link to this heading">#</a></h2>
+<p><strong>RS05 has recorded hardware evidence</strong> in <a class="reference internal" href="../case-studies/rs05.html"><span class="std std-doc">the reference study</span></a>.
+The other RobStride profiles and all Damiao profiles require commissioning on the
+actual unit. Software tests check protocol encoding, response matching, startup
+checks, error cleanup and the offline fitting path; they do not establish accuracy
+on every motor listed above.</p>
+<p>Continue with <a class="reference internal" href="../guide/configuration.html"><span class="std std-doc">Setup</span></a> to configure a mounted device.
+For wire formats, register behavior and manufacturer sources, see <a class="reference internal" href="protocols.html"><span class="std std-doc">Protocols</span></a>.</p>
 </section>
 </section>
 
@@ -415,12 +485,12 @@ uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../guide/validation.html"
+       href="parameters.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Validation</p>
+        <p class="prev-next-title">Models and parameters</p>
       </div>
     </a>
     <a class="right-next"
@@ -451,9 +521,10 @@ uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#native-support">Native support</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#damiao-acquisition">Damiao acquisition</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sources-and-validation">Sources and validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#robstride-profiles">RobStride profiles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#damiao-profiles">Damiao profiles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-a-profile-contains">What a profile contains</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-coverage">Validation coverage</a></li>
 </ul>
   </nav></div>
 

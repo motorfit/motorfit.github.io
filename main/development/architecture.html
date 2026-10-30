@@ -57,7 +57,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Contributing" href="contributing.html" />
-    <link rel="prev" title="RS05 findings" href="../case-studies/rs05-findings.html" />
+    <link rel="prev" title="RS05 results and remaining errors" href="../case-studies/rs05-findings.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -267,23 +267,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="current nav bd-sidenav">
@@ -348,91 +351,129 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="architecture">
 <h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">#</a></h1>
-<p>MotorFit organizes the workflow around motor, controller, fixture and dataset boundaries. RS05-specific evidence lives in a <a class="reference internal" href="../case-studies/rs05.html"><span class="std std-doc">reference study</span></a>.</p>
-<p>The reusable device unit is a protocol family; the configuration unit is a motor model; the calibrated unit is a mounted device. RS00–RS06 share one RobStride driver; Damiao MIT uses a separate native driver.</p>
+<p>MotorFit connects bench acquisition to BAM identification and physics replay. The
+main boundary is the saved recording: fitting reads its motor and fixture snapshot
+without opening CAN or consulting a mounted device’s current configuration.</p>
+<section id="data-flow">
+<h2>Data flow<a class="headerlink" href="#data-flow" title="Link to this heading">#</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Setup TOML → native driver + trajectory → raw recording
+                                             ↓ process
+                                      uniform-grid logs
+                                             ↓ fit
+                                        model.json
+                                             ↓ evaluate
+                                  predictions and errors
+</pre></div>
+</div>
+<p>Physics replay adds a packaging step: a dataset manifest names the model,
+recordings and saved BAM predictions with relative paths and hashes. See
+<a class="reference internal" href="../reference/data.html"><span class="std std-doc">Data formats</span></a> for the two input formats and their fields.</p>
+</section>
+<section id="code-map">
+<h2>Code map<a class="headerlink" href="#code-map" title="Link to this heading">#</a></h2>
+<p>Paths below are relative to <code class="docutils literal notranslate"><span class="pre">src/motorfit/</span></code>.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
-<tr class="row-odd"><th class="head"><p>Directory</p></th>
+<tr class="row-odd"><th class="head"><p>Module</p></th>
 <th class="head"><p>Responsibility</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/motorfit/devices/</span></code></p></td>
-<td><p>Native protocols, backend selection and supported-model catalogue</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cli.py</span></code></p></td>
+<td><p>Dispatches the <code class="docutils literal notranslate"><span class="pre">motorfit</span></code> commands</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">acquisition</span></code></p></td>
-<td><p>Generic Python recorder, trajectories, formal CSV-to-BAM export</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config.py</span></code></p></td>
+<td><p>Composes setup, motor, fixture, motion and coordinate files</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">identification/bam</span></code></p></td>
-<td><p>Torque-MIT adapter and unchanged upstream BAM integration</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">devices/spec.py</span></code></p></td>
+<td><p>Defines model names, protocol families and encoding ranges</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">devices/registry.py</span></code></p></td>
+<td><p>Selects a driver and applies command quantization</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">devices/robstride/</span></code>, <code class="docutils literal notranslate"><span class="pre">devices/damiao/</span></code></p></td>
+<td><p>Encode frames, match feedback and manage device state</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">acquisition/recorder.py</span></code></p></td>
+<td><p>Executes a trajectory, retains samples/frames and shuts down</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">acquisition/trajectories.py</span></code></p></td>
+<td><p>Adapts BAM trajectories and implements <code class="docutils literal notranslate"><span class="pre">soccer_sweep</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">identification/bam/</span></code></p></td>
+<td><p>Registers the torque-MIT actuator and wraps BAM processing, fitting and evaluation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rigs/pendulum.py</span></code></p></td>
+<td><p>Supplies fixture inertia and gravity</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">identification/{mujoco,newton,mjlab}.py</span></code></p></td>
-<td><p>Frozen M1 replay on optional backends</p></td>
+<td><p>Replays the supported M1 pendulum model in each backend</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rigs</span></code></p></td>
-<td><p>Recorded pendulum geometry and CAD mass properties</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dataset.py</span></code></p></td>
+<td><p>Resolves manifest paths and checks hashes, identity and splits</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dataset.py</span></code></p></td>
-<td><p>Relative paths, content hashes, motor identity and split checks</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">validation</span></code></p></td>
-<td><p>Feedback audit, stationary evidence, solver options and release events</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scripts</span></code></p></td>
-<td><p>CAD preparation, measured-data figure generation and replay rendering</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">validation/</span></code></p></td>
+<td><p>Implements RS05 feedback audits, solver settings and release-event analysis</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>A setup in <code class="docutils literal notranslate"><span class="pre">configs/setups/</span></code> composes model profiles from <code class="docutils literal notranslate"><span class="pre">motors/</span></code>, measured geometry from <code class="docutils literal notranslate"><span class="pre">fixtures/</span></code> and experiment settings from <code class="docutils literal notranslate"><span class="pre">acquisition/</span></code>. References resolve against that setup file. Each mounted device has its own ignored coordinate file in <code class="docutils literal notranslate"><span class="pre">configs/local/</span></code>. <code class="docutils literal notranslate"><span class="pre">configs/simulation/</span></code> contains reusable solver settings; measured release scenes belong to the local study archive. Loading a model or an offline dataset does not access the device driver.</p>
-<p>Dataset schema 1 has a <code class="docutils literal notranslate"><span class="pre">records</span></code> list. Every recording names its processed/raw file and BAM reference prediction with SHA-256, plus optional original frame files. All current paths resolve relative to the manifest. Historical absolute paths inside unchanged raw JSON are evidence only: executable readers never use them as file locations.</p>
-<p>The full dataset and the three-record example share this schema. The formal split and UID travel with the data; arbitrary changes to a current TOML cannot reinterpret a saved recording or M1. <code class="docutils literal notranslate"><span class="pre">motorfit</span> <span class="pre">verify</span></code> verifies the model and all named inputs.</p>
-<p>Add a motor of the same protocol by adding a sourced model TOML and a separate setup. Add another protocol as a driver and a control-law adapter. Add another fixture as configuration, or a new rig implementation if its physical equations differ.</p>
-<p>The registry selects the RobStride or Damiao driver. Both use the torque-MIT actuator and measured pendulum rig; see <a class="reference internal" href="../reference/motors.html"><span class="std std-doc">motor support</span></a>. These boundaries prevent an SDK method name from silently implying compatible units or fresh measurement timing.</p>
-<p>The installed command is <code class="docutils literal notranslate"><span class="pre">motorfit</span></code>; Python modules live under <code class="docutils literal notranslate"><span class="pre">motorfit</span></code>. All acquisition goes through <code class="docutils literal notranslate"><span class="pre">motorfit</span> <span class="pre">record</span></code>. The C++ helper in <code class="docutils literal notranslate"><span class="pre">validation/release_event.cpp</span></code> is used only for MuJoCo event replay.</p>
-<section id="extension-points">
-<h2>Extension points<a class="headerlink" href="#extension-points" title="Link to this heading">#</a></h2>
-<section id="motor-drivers-and-control-laws">
-<h3>Motor drivers and control laws<a class="headerlink" href="#motor-drivers-and-control-laws" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Boundary</p></th>
-<th class="head"><p>Implementation</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Motor specification</p></td>
-<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/devices/spec.py"><code class="docutils literal notranslate"><span class="pre">MotorSpec</span></code></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>Native backend selection and command quantization</p></td>
-<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/devices/registry.py"><code class="docutils literal notranslate"><span class="pre">registry.py</span></code></a></p></td>
-</tr>
-<tr class="row-even"><td><p>Device lifecycle and wire evidence</p></td>
-<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/tree/main/src/motorfit/devices"><code class="docutils literal notranslate"><span class="pre">devices/</span></code></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>Recording schema and command timing</p></td>
-<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/acquisition/recorder.py"><code class="docutils literal notranslate"><span class="pre">recorder.py</span></code></a></p></td>
-</tr>
-<tr class="row-even"><td><p>BAM input-to-torque law</p></td>
-<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/identification/bam/actuator.py"><code class="docutils literal notranslate"><span class="pre">MITActuator</span></code></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>Saved model/log loading</p></td>
-<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/identification/bam/runner.py"><code class="docutils literal notranslate"><span class="pre">runner.py</span></code></a></p></td>
-</tr>
-<tr class="row-even"><td><p>Frozen M1 physics replay</p></td>
-<td><p><a class="reference external" href="https://github.com/motorfit/motorfit/tree/main/src/motorfit/identification"><code class="docutils literal notranslate"><span class="pre">identification/</span></code></a></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Add an adapter only after specifying actual units, gains, saturation, enable/fault state and fresh feedback semantics. An interface named <code class="docutils literal notranslate"><span class="pre">send_mit</span></code> does not guarantee the same law: <a class="reference internal" href="../reference/motors.html"><span class="std std-doc">the support matrix</span></a> documents the reference protocols’ differences. The snapshot defines the torque-MIT ranges. Unrecognized families are rejected.</p>
-<p>Keep device codecs and transports separate from the numerical model. Test wire fixtures, shutdown failures and an offline process/fit/load cycle, then collect a small real dataset and evaluate independent runs before making accuracy claims.</p>
+<p>Upstream BAM stays in <code class="docutils literal notranslate"><span class="pre">third_party/bam/</span></code> at the committed submodule revision.
+MotorFit’s integration belongs in its own package. The C++ helper
+<code class="docutils literal notranslate"><span class="pre">validation/release_event.cpp</span></code> is used for MuJoCo event replay; ordinary Python
+recording does not require it.</p>
 </section>
-<section id="fixtures">
-<h3>Fixtures<a class="headerlink" href="#fixtures" title="Link to this heading">#</a></h3>
-<p><a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/rigs/pendulum.py"><code class="docutils literal notranslate"><span class="pre">Pendulum</span></code></a> supplies the current inertia and gravity terms. Measure its inputs independently of the motor fit. A fixture with different equations needs a rig implementation and a matching simulation scene. <code class="docutils literal notranslate"><span class="pre">MITActuator</span></code> currently selects <code class="docutils literal notranslate"><span class="pre">Pendulum</span></code>; a different rig requires explicit adapter wiring.</p>
-<p>The archived <code class="docutils literal notranslate"><span class="pre">data/rs05/assets/bench/</span></code> is the reference assembly’s geometry. Do not treat its mass properties or appearance as measured geometry for a new device.</p>
+<section id="configuration-and-model-identity">
+<h2>Configuration and model identity<a class="headerlink" href="#configuration-and-model-identity" title="Link to this heading">#</a></h2>
+<p>Three objects serve different purposes:</p>
+<ul class="simple">
+<li><p>A <strong>protocol family</strong> chooses the wire implementation, such as RobStride.</p></li>
+<li><p>A <strong>model profile</strong> defines a model’s encoding ranges, such as RS05.</p></li>
+<li><p>A <strong>mounted setup</strong> adds device addresses, a measured fixture and a physical zero.</p></li>
+</ul>
+<p>A setup composes those files using paths relative to the setup file. Mounted-device
+coordinates live under ignored <code class="docutils literal notranslate"><span class="pre">configs/local/</span></code>. The resolved values travel with
+each recording; the motor profile also travels with a fitted model.</p>
+<p>The fitter requires matching motor snapshots across its inputs. Loads and gains
+may differ between records. Editing a TOML later does not reinterpret an existing
+log or saved model. Packaged replay additionally verifies the manifest’s hashes,
+UID and split information before using the data.</p>
 </section>
+<section id="add-a-model-using-an-existing-protocol">
+<h2>Add a model using an existing protocol<a class="headerlink" href="#add-a-model-using-an-existing-protocol" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Add a sourced profile under <code class="docutils literal notranslate"><span class="pre">configs/motors/&lt;family&gt;/</span></code>, with the actual encoding ranges.</p></li>
+<li><p>Add a setup template referencing that profile and an appropriate fixture and motion file.</p></li>
+<li><p>Check profile loading and representative wire encodings, then commission the physical unit.</p></li>
+<li><p>Record and evaluate independent runs before documenting hardware accuracy.</p></li>
+</ol>
+<p>RS00–RS06 share the RobStride driver. The Damiao MIT profiles share the Damiao
+driver. A common frame layout does not imply common torque, speed or gain ranges.
+<a class="reference internal" href="../reference/protocols.html"><span class="std std-doc">Protocols</span></a> identifies the source for each family.</p>
+</section>
+<section id="add-a-protocol-or-control-law">
+<h2>Add a protocol or control law<a class="headerlink" href="#add-a-protocol-or-control-law" title="Link to this heading">#</a></h2>
+<p>Implement the driver lifecycle and feedback interface alongside the existing
+families, then register the family in <code class="docutils literal notranslate"><span class="pre">devices/registry.py</span></code>. Define command units,
+gain semantics, saturation, enable state, faults and reply matching explicitly.</p>
+<p>The current numerical adapter is
+<a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/src/motorfit/identification/bam/actuator.py"><code class="docutils literal notranslate"><span class="pre">MITActuator</span></code></a>.
+It reconstructs nominal torque from encoded position/velocity targets, gains and
+feedforward torque. A protocol with a different control law needs its own adapter,
+recorded inputs and saved-model loader support. An API method called <code class="docutils literal notranslate"><span class="pre">send_mit</span></code>
+alone is insufficient to establish compatible behavior.</p>
+<p>Verify representative expected bytes, failure cleanup and an offline
+process/fit/load operation. Adding a BAM adapter does not automatically add support
+to the M1 physics backends; implement and check those equations separately.</p>
+</section>
+<section id="add-a-fixture">
+<h2>Add a fixture<a class="headerlink" href="#add-a-fixture" title="Link to this heading">#</a></h2>
+<p>Change a pendulum’s measured values through configuration. If its physical
+equations differ, implement a rig that supplies the mass and bias terms and wire
+it into the actuator. <code class="docutils literal notranslate"><span class="pre">MITActuator</span></code> currently selects <code class="docutils literal notranslate"><span class="pre">Pendulum</span></code> explicitly.
+Physics replay also needs a corresponding scene and matching coordinate convention.</p>
+<p>The RS05 CAD assembly under <code class="docutils literal notranslate"><span class="pre">data/rs05/assets/bench/</span></code> belongs to that archived
+experiment. A new fixture needs its own measurements.</p>
 </section>
 </section>
 
@@ -452,7 +493,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">RS05 findings</p>
+        <p class="prev-next-title">RS05 results and remaining errors</p>
       </div>
     </a>
     <a class="right-next"
@@ -483,11 +524,12 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extension-points">Extension points</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#motor-drivers-and-control-laws">Motor drivers and control laws</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixtures">Fixtures</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-flow">Data flow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-map">Code map</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-and-model-identity">Configuration and model identity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-a-model-using-an-existing-protocol">Add a model using an existing protocol</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-a-protocol-or-control-law">Add a protocol or control law</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-a-fixture">Add a fixture</a></li>
 </ul>
   </nav></div>
 

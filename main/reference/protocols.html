@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Protocols &#8212; MotorFit</title>
+    <title>Protocol behavior &#8212; MotorFit</title>
   
   
   
@@ -56,8 +56,8 @@
     <link rel="canonical" href="https://motorfit.github.io/main/reference/protocols.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="RS05 study" href="../case-studies/rs05.html" />
-    <link rel="prev" title="Backends" href="backends.html" />
+    <link rel="next" title="RS05 identification study" href="../case-studies/rs05.html" />
+    <link rel="prev" title="Simulation backends" href="backends.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -204,6 +204,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -263,23 +267,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -325,7 +332,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Protocols</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Protocol behavior</span></li>
   </ul>
 </nav>
 </div>
@@ -342,14 +349,67 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="protocols">
-<h1>Protocols<a class="headerlink" href="#protocols" title="Link to this heading">#</a></h1>
-<p>MotorFit’s native adapters are implemented in Python using python-can. The references below describe manufacturer protocols, register layouts and control modes.</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/RobStride/Product_Information/tree/667444b6d1f9fabe01b87765ee73abd29d54e71b">RobStride product information</a>: model manuals for extended-CAN command and feedback encoding. Profiles link to the corresponding model manual. Alternate CANopen and MIT firmware layouts require their own adapters.</p></li>
-<li><p><a class="reference external" href="https://github.com/dmBots/motor-control-routine/tree/ae6c1031056908d3d8059f003bd015a9d6b21894">Damiao control examples</a>: MIT command packing, feedback fields and register access. Profile ranges are templates; the driver checks PMAX, VMAX and TMAX against the connected device before enabling.</p></li>
-</ul>
-<p>Protocol links describe family-level framing and registers; they do not certify every shipped template range for every firmware revision. Match the template to the mounted device. Each recorded motor specification is saved with its data and fitted model. Protocol templates specify an experimental operating envelope; they do not invent model-specific ratings or calibrated constants. Current verification uses golden packet checks, simulated device responses, failure cases and the actual BAM process/fit/evaluate/plot chain. New physical motors have not been exercised.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="protocol-behavior">
+<h1>Protocol behavior<a class="headerlink" href="#protocol-behavior" title="Link to this heading">#</a></h1>
+<p>This page describes the implemented wire protocols and driver behavior. To choose
+a motor profile, use <a class="reference internal" href="motors.html"><span class="std std-doc">Motors</span></a>; to operate the bench, follow
+<a class="reference internal" href="../guide/acquisition.html"><span class="std std-doc">Record</span></a>.</p>
+<section id="robstride">
+<h2>RobStride<a class="headerlink" href="#robstride" title="Link to this heading">#</a></h2>
+<p>The driver uses the manufacturer’s private extended-CAN protocol. Position,
+velocity, torque, Kp and Kd are quantized to 16-bit fields using the selected model’s
+ranges. A control request is followed by its addressed type-2 feedback response.</p>
+<p>Startup stops the motor, prepares the supported operating mode and watchdog,
+then enables control. Acquisition expects the reported mode to agree with the
+requested enabled or disabled state. A fault, mode mismatch or missing reply
+aborts the run and initiates cleanup.</p>
+<p>The model TOMLs link to their manufacturer manuals. RS01/02/05/06 retain the pinned
+manual references; RS00/03/04 retain their shipped ranges and gain limits pending
+verification on the actual firmware and hardware.</p>
+<p>Source: <a class="reference external" href="https://github.com/RobStride/Product_Information/tree/667444b6d1f9fabe01b87765ee73abd29d54e71b">RobStride product manuals at the referenced revision</a>.</p>
+</section>
+<section id="damiao">
+<h2>Damiao<a class="headerlink" href="#damiao" title="Link to this heading">#</a></h2>
+<p>The driver implements MIT mode over standard CAN. Position uses 16 bits; velocity,
+torque, Kp and Kd use 12 bits. Kp is encoded over <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">500]</span></code> and Kd over <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">5]</span></code>.
+Motor-specific position, velocity and torque ranges come from the profile.</p>
+<p>Before enabling, the driver:</p>
+<ol class="arabic simple">
+<li><p>Stops the motor and reads PMAX, VMAX and TMAX.</p></li>
+<li><p>Rejects a mismatch between those values and the profile.</p></li>
+<li><p>Configures and verifies MIT mode and the TIMEOUT watchdog register.</p></li>
+<li><p>Enables the motor and checks the reply status.</p></li>
+</ol>
+<p>TIMEOUT is written as <code class="docutils literal notranslate"><span class="pre">round(watchdog_ms</span> <span class="pre">×</span> <span class="pre">20)</span></code> ticks. This path does not issue a
+firmware-zero, persistent-save or fault-clear command.</p>
+<p>Replies must match both the configured feedback CAN ID and the motor nibble.
+The original status is retained as <code class="docutils literal notranslate"><span class="pre">status_code</span></code>; recording normalizes <code class="docutils literal notranslate"><span class="pre">mode</span></code> to
+0 for disabled and 2 for enabled. Motor and rotor temperatures are saved separately.</p>
+<p>Source: <a class="reference external" href="https://github.com/dmBots/motor-control-routine/tree/ae6c1031056908d3d8059f003bd015a9d6b21894">Damiao control examples at the referenced revision</a>.</p>
+</section>
+<section id="command-and-feedback-evidence">
+<h2>Command and feedback evidence<a class="headerlink" href="#command-and-feedback-evidence" title="Link to this heading">#</a></h2>
+<p>Both drivers use serial request/reply transactions and drain queued frames before
+sending a new request. Frames are saved even when they fail the reply filter.
+There is no in-loop register-telemetry stream during recording.</p>
+<p>Neither protocol supplies a transaction sequence number for this exchange.
+Filtering reduces stale-response risk but cannot prove that an old delayed packet
+will never arrive after a new request. The saved host timestamps indicate command
+and reception times, not the motor’s internal sampling clock.</p>
+<p>Quantization can make the encoded value of a requested zero nonzero. MotorFit saves
+encoded gains, velocity target and feedforward torque so the fitter reproduces the
+actual command fields. Feedback <code class="docutils literal notranslate"><span class="pre">load</span></code> remains nominal firmware torque, without
+independent shaft-torque calibration.</p>
+</section>
+<section id="read-and-shutdown-behavior">
+<h2>Read and shutdown behavior<a class="headerlink" href="#read-and-shutdown-behavior" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">inspect</span></code> reads registers without changing the enable state. It saves individual
+read failures beside successful values. <code class="docutils literal notranslate"><span class="pre">read</span></code> and <code class="docutils literal notranslate"><span class="pre">zero</span></code> use a device context that
+sends disable on exit. <code class="docutils literal notranslate"><span class="pre">record</span></code> attempts disable and bus closure after success,
+errors or interruption; cleanup failures are retained in the recording.</p>
+<p>These software behaviors are covered by protocol and failure-path tests. The
+<a class="reference internal" href="../case-studies/rs05.html"><span class="std std-doc">RS05 study</span></a> provides the current recorded hardware evidence.</p>
+</section>
 </section>
 
 
@@ -368,7 +428,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Backends</p>
+        <p class="prev-next-title">Simulation backends</p>
       </div>
     </a>
     <a class="right-next"
@@ -376,7 +436,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">RS05 study</p>
+        <p class="prev-next-title">RS05 identification study</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -386,6 +446,27 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#robstride">RobStride</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#damiao">Damiao</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-and-feedback-evidence">Command and feedback evidence</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-and-shutdown-behavior">Read and shutdown behavior</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

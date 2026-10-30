@@ -56,7 +56,7 @@
     <link rel="canonical" href="https://motorfit.github.io/main/index.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Quickstart" href="getting-started/quickstart.html" />
+    <link rel="next" title="Run the offline example" href="getting-started/quickstart.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -268,23 +268,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="guide/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guide/acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guide/identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guide/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -325,53 +328,71 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="motorfit">
 <h1>MotorFit<a class="headerlink" href="#motorfit" title="Link to this heading">#</a></h1>
-<p><strong>Record a motor. Identify its dynamics. Validate the model.</strong></p>
-<p>MotorFit adds motor drivers, experiment recording and simulation validation to
-<a class="reference external" href="https://github.com/Rhoban/bam">Rhoban BAM</a>. Start with a complete offline run,
-then use the same tools with a measured motor and fixture.</p>
-<p><img alt="Experiment, identification and simulation workflow" src="_images/overview.png" /></p>
-<section id="start-here">
-<h2>Start here<a class="headerlink" href="#start-here" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="getting-started/quickstart.html"><span class="std std-doc">Quickstart</span></a>: install MotorFit and replay three recordings without hardware.</p></li>
-<li><p><a class="reference internal" href="getting-started/workflow.html"><span class="std std-doc">Workflow</span></a>: plan a study, fit candidates and evaluate a fixed model.</p></li>
-<li><p><a class="reference internal" href="guide/configuration.html"><span class="std std-doc">Configuration</span></a>: select a motor profile and describe the mounted assembly.</p></li>
-</ul>
+<p>MotorFit identifies actuator dynamics from measured motion. Mount a motor on a
+pendulum fixture, record its response to position commands, and fit a model that
+predicts the motion under different loads and controller gains.</p>
+<p>It supports <strong>RobStride and Damiao</strong> motors over Linux SocketCAN. MotorFit provides
+the drivers, recording tools and simulation adapters; <a class="reference external" href="https://github.com/Rhoban/bam">Rhoban BAM</a>
+provides the friction models and optimizer.</p>
+<p><img alt="A pendulum experiment produces recordings, a fitted model and simulation comparisons." src="_images/overview.png" /></p>
+<section id="what-you-get">
+<h2>What you get<a class="headerlink" href="#what-you-get" title="Link to this heading">#</a></h2>
+<p>A fitted <code class="docutils literal notranslate"><span class="pre">model.json</span></code> contains friction, effective inertia, torque scaling,
+command delay and coordinate-offset parameters. You can evaluate it against
+recordings that were excluded from fitting, or replay a supported M1 model in
+MuJoCo, Newton or mjlab.</p>
+<p>The output is an actuator model for the measured operating conditions. MotorFit
+currently models a single pendulum joint; it does not automatically calibrate an
+entire robot or edit its XML. See <a class="reference internal" href="reference/parameters.html"><span class="std std-doc">Parameters</span></a> for the
+physical meaning of the fitted values and their connection to simulation.</p>
 </section>
-<section id="find-a-guide">
-<h2>Find a guide<a class="headerlink" href="#find-a-guide" title="Link to this heading">#</a></h2>
+<section id="start-with-a-recorded-example">
+<h2>Start with a recorded example<a class="headerlink" href="#start-with-a-recorded-example" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="getting-started/quickstart.html"><span class="std std-doc">Run the quickstart</span></a> to reproduce three real RS05
+recordings and inspect their prediction errors. You need Python 3.12, uv and access
+to the source repository. A motor and GPU are unnecessary for this first run.</p>
+</section>
+<section id="identify-your-own-motor">
+<h2>Identify your own motor<a class="headerlink" href="#identify-your-own-motor" title="Link to this heading">#</a></h2>
+<p>Follow the guides in order. Each uses the same configuration and study directory.</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="getting-started/workflow.html"><span class="std std-doc">Plan the experiment</span></a>: choose loads, motion and evaluation runs.</p></li>
+<li><p><a class="reference internal" href="guide/configuration.html"><span class="std std-doc">Set up the bench</span></a>: describe the motor, fixture and connection.</p></li>
+<li><p><a class="reference internal" href="guide/acquisition.html"><span class="std std-doc">Record motion</span></a>: establish the zero, collect runs and check their quality.</p></li>
+<li><p><a class="reference internal" href="guide/identification.html"><span class="std std-doc">Fit a model</span></a>: process the data and compare candidate models.</p></li>
+<li><p><a class="reference internal" href="guide/validation.html"><span class="std std-doc">Evaluate the result</span></a>: measure error on held-out runs and inspect residuals.</p></li>
+</ol>
+</section>
+<section id="current-support">
+<h2>Current support<a class="headerlink" href="#current-support" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
-<tr class="row-odd"><th class="head"><p>You want to…</p></th>
-<th class="head"><p>Read</p></th>
+<tr class="row-odd"><th class="head"><p>Capability</p></th>
+<th class="head"><p>Available</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Record motor commands and feedback</p></td>
-<td><p><a class="reference internal" href="guide/acquisition.html"><span class="std std-doc">Recording</span></a></p></td>
+<tr class="row-even"><td><p>Motor acquisition</p></td>
+<td><p>RobStride private CAN protocol; Damiao MIT protocol</p></td>
 </tr>
-<tr class="row-odd"><td><p>Fit a model to your measurements</p></td>
-<td><p><a class="reference internal" href="guide/identification.html"><span class="std std-doc">Identification</span></a></p></td>
+<tr class="row-odd"><td><p>Identification</p></td>
+<td><p>BAM M1–M6 friction models with torque-MIT control</p></td>
 </tr>
-<tr class="row-even"><td><p>Compare predictions with recordings</p></td>
-<td><p><a class="reference internal" href="guide/validation.html"><span class="std std-doc">Validation</span></a></p></td>
+<tr class="row-even"><td><p>Physics replay</p></td>
+<td><p>M1 with the pendulum fixture</p></td>
 </tr>
-<tr class="row-odd"><td><p>Check supported devices and runtimes</p></td>
-<td><p><a class="reference internal" href="reference/motors.html"><span class="std std-doc">Motor support</span></a> · <a class="reference internal" href="reference/backends.html"><span class="std std-doc">Backends</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>Inspect a completed experiment</p></td>
-<td><p><a class="reference internal" href="case-studies/rs05.html"><span class="std std-doc">RS05 study</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>Add a driver or change the project</p></td>
-<td><p><a class="reference internal" href="development/architecture.html"><span class="std std-doc">Architecture</span></a> · <a class="reference internal" href="development/contributing.html"><span class="std std-doc">Contributing</span></a></p></td>
+<tr class="row-odd"><td><p>Hardware reference</p></td>
+<td><p>One RS05 study; Damiao currently has software tests</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>The version menu selects the development handbook (<code class="docutils literal notranslate"><span class="pre">main</span></code>) or a published release.
-The package is currently <strong>0.1.0</strong>, unreleased. The handbook is public; cloning the source
-repository requires access. A <a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/README.zh-CN.md">Chinese introduction</a>
-is available in the repository.</p>
+<p><a class="reference internal" href="reference/motors.html"><span class="std std-doc">Supported models</span></a> lists the shipped profiles.
+<a class="reference internal" href="case-studies/rs05.html"><span class="std std-doc">The RS05 study</span></a> describes the experiment, selected parameters
+and remaining prediction errors.</p>
+<p>The package is <strong>0.1.0, unreleased</strong>. The menu beside the logo selects the handbook
+version. The documentation is public; the source repository currently requires
+GitHub access.</p>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -400,7 +421,7 @@ is available in the repository.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Quickstart</p>
+        <p class="prev-next-title">Run the offline example</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -423,8 +444,10 @@ is available in the repository.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-here">Start here</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#find-a-guide">Find a guide</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-get">What you get</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-with-a-recorded-example">Start with a recorded example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-your-own-motor">Identify your own motor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#current-support">Current support</a><ul class="visible nav section-nav flex-column">
 </ul>
 </li>
 </ul>

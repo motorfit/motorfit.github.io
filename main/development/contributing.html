@@ -266,23 +266,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="current nav bd-sidenav">
@@ -416,8 +419,9 @@ fixtures and modified inputs. Optional Newton/mjlab tests skip when their runtim
 are absent; they are not evidence of GPU or hardware validation in ordinary CI.</p>
 <p>Keep tests focused on distinct failure modes. Test shared codecs with representative
 profiles and independent expected bytes; repeat by model or firmware only when the
-encoding or behavior differs. Run the complete torque-MIT fitting pipeline once. Avoid duplicating an integration check with mocks
-or retesting upstream physics; retain failure cleanup and data-integrity checks.
+encoding or behavior differs. Run the complete torque-MIT fitting pipeline once.
+Avoid duplicating an integration check with mocks or retesting upstream physics;
+retain failure cleanup and data-integrity checks.
 Prefer tests of complete user operations over individual helpers, property access,
 catalogue listings or every possible invalid argument. A new test should identify
 a concrete regression that the existing workflow checks would miss.</p>
@@ -458,6 +462,22 @@ When a published page moves, add its former URL to <code class="docutils literal
 introduction and quickstart, and link to the handbook for details; update their
 English and Chinese commands together. Keep reusable guidance separate from
 RS05-specific settings and measurements. New technical pages use English.</p>
+<section id="write-and-verify-a-page">
+<h3>Write and verify a page<a class="headerlink" href="#write-and-verify-a-page" title="Link to this heading">#</a></h3>
+<p>Start a guide with the task, required inputs and expected result. Use one consistent
+set of paths through related guides. After each command, explain what the user
+should see, what to inspect and when to continue. Keep exhaustive field and option
+lists in reference pages; link to them from the step that needs them.</p>
+<p>Check behavior against the current implementation. Run offline examples and
+verify their output names, units and reported values. Distinguish a reproducibility
+check from accuracy on measured motion, and distinguish software tests from
+hardware evidence. Commands that require the full RS05 archive must say so before
+the command block.</p>
+<p>Before publishing, build with warnings treated as errors and inspect the rendered
+pages. Check formulas, tables, navigation, local links, search and narrow layouts.
+A successful build catches structural problems; it does not establish technical
+accuracy. Record any example that could not be executed and the missing input.</p>
+</section>
 </section>
 <section id="preview-the-handbook">
 <h2>Preview the handbook<a class="headerlink" href="#preview-the-handbook" title="Link to this heading">#</a></h2>
@@ -563,7 +583,10 @@ disables deploy keys, so the source CI has no cross-repository deployment secret
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directory-layout">Directory layout</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-environment">Development environment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation structure</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-and-verify-a-page">Write and verify a page</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preview-the-handbook">Preview the handbook</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ci-and-publication">CI and publication</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#release-documentation">Release documentation</a></li>

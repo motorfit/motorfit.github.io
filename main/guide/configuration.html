@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Configuration &#8212; MotorFit</title>
+    <title>Set up the bench &#8212; MotorFit</title>
   
   
   
@@ -45,6 +45,8 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=fc97db16"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'guide/configuration';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
@@ -56,8 +58,8 @@
     <link rel="canonical" href="https://motorfit.github.io/main/guide/configuration.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Recording" href="acquisition.html" />
-    <link rel="prev" title="Workflow" href="../getting-started/workflow.html" />
+    <link rel="next" title="Record motion" href="acquisition.html" />
+    <link rel="prev" title="Plan an identification experiment" href="../getting-started/workflow.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -267,23 +269,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="validation.html">Validation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -329,7 +334,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Configuration</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Set up the bench</span></li>
   </ul>
 </nav>
 </div>
@@ -346,48 +351,188 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="configuration">
-<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h1>
-<p>Choose the <a class="reference internal" href="../reference/motors.html"><span class="std std-doc">connection path</span></a> from the controller protocol and control law. RobStride and Damiao have native acquisition adapters for the torque-based MIT law.</p>
-<section id="configure-the-mounted-assembly">
-<h2>Configure the mounted assembly<a class="headerlink" href="#configure-the-mounted-assembly" title="Link to this heading">#</a></h2>
-<p>Copy a setup inside <a class="reference external" href="https://github.com/motorfit/motorfit/tree/main/configs/setups"><code class="docutils literal notranslate"><span class="pre">configs/setups/</span></code></a> so its references stay valid. Use <code class="docutils literal notranslate"><span class="pre">rs05_pendulum.toml</span></code> for RobStride or <code class="docutils literal notranslate"><span class="pre">dm4310_pendulum.toml</span></code> for Damiao, then edit:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="set-up-the-bench">
+<h1>Set up the bench<a class="headerlink" href="#set-up-the-bench" title="Link to this heading">#</a></h1>
+<p>Before recording, describe the mounted motor, the pendulum and the connection.
+MotorFit reads these settings from TOML files. The same setup file is used by
+<code class="docutils literal notranslate"><span class="pre">read</span></code>, <code class="docutils literal notranslate"><span class="pre">inspect</span></code>, <code class="docutils literal notranslate"><span class="pre">zero</span></code> and <code class="docutils literal notranslate"><span class="pre">record</span></code>.</p>
+<p>You need a supported motor, a rigidly mounted pendulum, measured fixture properties,
+and a Linux machine with a SocketCAN interface. Complete the
+<a class="reference internal" href="../getting-started/quickstart.html"><span class="std std-doc">offline quickstart</span></a> first to check the software.</p>
+<section id="create-a-local-configuration">
+<h2>1. Create a local configuration<a class="headerlink" href="#create-a-local-configuration" title="Link to this heading">#</a></h2>
+<p>The example below starts from RS05 templates:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>configs/local
+cp<span class="w"> </span>configs/setups/rs05_pendulum.toml<span class="w"> </span>configs/local/bench.toml
+cp<span class="w"> </span>configs/fixtures/pendulum_100g_200mm.toml<span class="w"> </span>configs/local/bench-fixture.toml
+cp<span class="w"> </span>configs/acquisition/bam_6s.toml<span class="w"> </span>configs/local/bench-motion.toml
+</pre></div>
+</div>
+<p>For Damiao, copy <code class="docutils literal notranslate"><span class="pre">configs/setups/dm4310_pendulum.toml</span></code> as the setup and
+<code class="docutils literal notranslate"><span class="pre">configs/acquisition/damiao_example.toml</span></code> as the motion file instead.</p>
+<p>Edit the first four entries in <code class="docutils literal notranslate"><span class="pre">configs/local/bench.toml</span></code>:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">motor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"../motors/robstride/rs05.toml"</span>
+<span class="n">fixture</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bench-fixture.toml"</span>
+<span class="n">acquisition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bench-motion.toml"</span>
+<span class="n">coordinate_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bench-zero.toml"</span>
+</pre></div>
+</div>
+<p>For DM4310, the motor path is <code class="docutils literal notranslate"><span class="pre">../motors/damiao/4310.toml</span></code>.
+Select other profiles from <a class="reference internal" href="../reference/motors.html"><span class="std std-doc">Motors</span></a>.
+All four paths resolve <strong>relative to the setup file</strong>. Files in <code class="docutils literal notranslate"><span class="pre">configs/local/</span></code>
+are ignored by Git, so device-specific settings and zero offsets stay local.</p>
+<p>The copied numbers describe example equipment. Replace them with your measured
+fixture and chosen settings before using <code class="docutils literal notranslate"><span class="pre">record</span></code>.</p>
+</section>
+<section id="set-the-connection-and-supply">
+<h2>2. Set the connection and supply<a class="headerlink" href="#set-the-connection-and-supply" title="Link to this heading">#</a></h2>
+<p>Edit these sections of the setup:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
-<tr class="row-odd"><th class="head"><p>Input</p></th>
-<th class="head"><p>What to measure or select</p></th>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Meaning</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Motor profile</p></td>
-<td><p>Exact model, protocol mapping and firmware; profiles are in <code class="docutils literal notranslate"><span class="pre">configs/motors/&lt;family&gt;/</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">device.channel</span></code></p></td>
+<td><p>SocketCAN interface name, such as <code class="docutils literal notranslate"><span class="pre">can0</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Device</p></td>
-<td><p>CAN channel, motor address, feedback/host address and timeout</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">device.motor_id</span></code></p></td>
+<td><p>Address configured in the motor</p></td>
 </tr>
-<tr class="row-even"><td><p>Fixture</p></td>
-<td><p>Tip mass, length, arm mass, center of mass, inertia and hub inertia</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">device.host_id</span></code></p></td>
+<td><p>RobStride host address; the RS05 template uses 255</p></td>
 </tr>
-<tr class="row-odd"><td><p>Acquisition</p></td>
-<td><p>Excitation, amplitude, duration, sample rate and fixed gains</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">device.feedback_id</span></code></p></td>
+<td><p>Damiao reply CAN ID; the DM4310 template uses 17</p></td>
 </tr>
-<tr class="row-even"><td><p>Supply</p></td>
-<td><p>Configured voltage; this is not a synchronous voltage measurement</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">device.timeout_s</span></code></p></td>
+<td><p>Maximum wait for a matching reply, in seconds</p></td>
 </tr>
-<tr class="row-odd"><td><p>Coordinate</p></td>
-<td><p>A distinct ignored file for this mounted device’s software zero</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">device.watchdog_ms</span></code></p></td>
+<td><p>Drive communication watchdog requested before recording</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">supply.voltage</span></code></p></td>
+<td><p>Supply setting in volts, saved as recording metadata</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Read and inspect the device, then establish the coordinate at a known physical angle. The supplied gains and fixture describe examples, not commissioned settings for another assembly. <a class="reference internal" href="acquisition.html"><span class="std std-doc">Acquisition</span></a> gives the command sequence.</p>
-<p>The fitter uses the full motor definition saved in each recording. A new compatible model name does not require a new friction model. Protocol ranges are encoding limits, not measured output-torque limits. Damiao runtime PMAX/VMAX/TMAX must match the profile.</p>
+<p>The RS05 template uses motor address 127; DM4310 uses motor address 1. These are
+example addresses, not values detected from your device. Supply voltage is
+configured metadata, not a continuously measured channel.</p>
+<p>Keep the coordinate convention <code class="docutils literal notranslate"><span class="pre">downward-positive-encoder</span></code>. Physical angle zero
+means the pendulum points down; positive angle follows the encoder’s positive
+direction. The <a class="reference internal" href="acquisition.html#save-the-downward-zero"><span class="std std-ref">next guide</span></a> creates the
+zero file from an actual measurement.</p>
 </section>
-<section id="freeze-a-reusable-result">
-<h2>Freeze a reusable result<a class="headerlink" href="#freeze-a-reusable-result" title="Link to this heading">#</a></h2>
-<p>Keep each motor’s model and dataset in its own directory. Preserve its UID or identity, coordinates, controller settings and fixture with the recordings. Parameter JSON must retain the full motor definition. Never substitute the bundled RS05 M1 for a new motor’s fit.</p>
-<p>For a portable study, follow the <a class="reference external" href="https://github.com/motorfit/motorfit/blob/main/tests/fixtures/offline/manifest.json">example manifest</a>: relative paths, explicit splits, model/recording hashes and reference predictions. The current plots use pendulum load labels such as <code class="docutils literal notranslate"><span class="pre">mass_g</span></code>; other rigs need corresponding presentation metadata. See the <a class="reference internal" href="../getting-started/workflow.html"><span class="std std-doc">workflow</span></a> for split and evaluation discipline.</p>
-<p>For a new protocol, controller law or fixture equation, see <a class="reference internal" href="../development/architecture.html#extension-points"><span class="std std-ref">extension points</span></a>.</p>
+<section id="measure-the-fixture">
+<h2>3. Measure the fixture<a class="headerlink" href="#measure-the-fixture" title="Link to this heading">#</a></h2>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">configs/local/bench-fixture.toml</span></code>. Use SI units throughout:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Unit</p></th>
+<th class="head"><p>Measurement</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mass</span></code></p></td>
+<td><p>kg</p></td>
+<td><p>Total tip assembly: weight, bolt, nut and other tip attachments</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">length</span></code></p></td>
+<td><p>m</p></td>
+<td><p>Distance from the pivot to the tip assembly’s modeled point mass</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">arm_mass</span></code></p></td>
+<td><p>kg</p></td>
+<td><p>Moving arm mass, excluding the tip assembly</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">arm_com</span></code></p></td>
+<td><p>m</p></td>
+<td><p>Arm center of mass measured from the pivot</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">arm_inertia</span></code></p></td>
+<td><p>kg·m²</p></td>
+<td><p>Arm inertia <strong>about the pivot</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hub_inertia</span></code></p></td>
+<td><p>kg·m²</p></td>
+<td><p>Additional rotating hub inertia about the pivot</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The model uses</p>
+<div class="math notranslate nohighlight">
+\[
+J_\mathrm{fixture}=mL^2+J_\mathrm{arm}+J_\mathrm{hub},\qquad
+\tau_g=-9.80665\,(mL+m_a c_a)\sin(q+q_0).
+\]</div>
+<p>The tip assembly is treated as a point mass. Its own inertia is not included in
+<code class="docutils literal notranslate"><span class="pre">mass</span> <span class="pre">×</span> <span class="pre">length²</span></code>. The <a class="reference internal" href="../case-studies/rs05-fixture.html"><span class="std std-doc">RS05 fixture</span></a> shows a measured
+example and explains the separate CAD replay model.</p>
+<p>If the file includes <code class="docutils literal notranslate"><span class="pre">weight_mass</span></code>, <code class="docutils literal notranslate"><span class="pre">bolt_mass</span></code> and <code class="docutils literal notranslate"><span class="pre">nut_mass</span></code>, their sum must equal
+<code class="docutils literal notranslate"><span class="pre">mass</span></code>. Update all four fields when changing weights, or remove the three-component
+breakdown and provide the measured total. If <code class="docutils literal notranslate"><span class="pre">arm_com</span></code> and <code class="docutils literal notranslate"><span class="pre">arm_inertia</span></code> are omitted,
+the code assumes a uniform rod (<code class="docutils literal notranslate"><span class="pre">L/2</span></code> and <code class="docutils literal notranslate"><span class="pre">arm_mass</span> <span class="pre">×</span> <span class="pre">L²/3</span></code>). Supply measured values
+when that approximation is unsuitable.</p>
+</section>
+<section id="choose-the-motion-settings">
+<h2>4. Choose the motion settings<a class="headerlink" href="#choose-the-motion-settings" title="Link to this heading">#</a></h2>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">configs/local/bench-motion.toml</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">trajectory</span></code></p></td>
+<td><p>A name from <a class="reference internal" href="../reference/trajectories.html"><span class="std std-doc">Trajectories</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">duration_s</span></code></p></td>
+<td><p>Total run duration, in seconds</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">amplitude</span></code></p></td>
+<td><p>Multiplier on the trajectory’s target angle</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hz</span></code></p></td>
+<td><p>Requested host command rate</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kp</span></code>, <code class="docutils literal notranslate"><span class="pre">kd</span></code></p></td>
+<td><p>Fixed position and velocity gains for this run</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">telemetry_hz</span></code></p></td>
+<td><p>Keep at <code class="docutils literal notranslate"><span class="pre">0</span></code>; device inspection is performed separately</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sweep_k</span></code></p></td>
+<td><p>Frequency-growth coefficient, used only by <code class="docutils literal notranslate"><span class="pre">soccer_sweep</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Choose gains and motion limits for the actual load and available travel. In
+particular, <code class="docutils literal notranslate"><span class="pre">amplitude</span> <span class="pre">=</span> <span class="pre">1</span></code> does not mean one radian for every trajectory: a
+<code class="docutils literal notranslate"><span class="pre">lift_and_drop</span></code> target reaches <code class="docutils literal notranslate"><span class="pre">−π/2</span></code> at that scale.</p>
+<p>A model profile specifies how commands are encoded. Its maximum torque is not a
+recommended continuous operating torque or a measured limit for your assembly.</p>
+</section>
+<section id="check-the-composed-setup-without-a-motor">
+<h2>5. Check the composed setup without a motor<a class="headerlink" href="#check-the-composed-setup-without-a-motor" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">from pprint import pprint</span>
+<span class="s">from motorfit.config import load_setup</span>
+<span class="s">pprint(load_setup("configs/local/bench.toml"))</span>
+<span class="s">PY</span>
+</pre></div>
+</div>
+<p>This reads files without opening CAN. Check the selected model, fixture values,
+recording settings and zero-file path. An absent <code class="docutils literal notranslate"><span class="pre">zero_rad</span></code> is expected until you
+calibrate the coordinate. Successful loading checks file composition; it does not
+verify hardware addresses or approve the mechanical setup.</p>
+<p>Continue with <a class="reference internal" href="acquisition.html"><span class="std std-doc">Record motion</span></a>.</p>
 </section>
 </section>
 
@@ -407,7 +552,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Workflow</p>
+        <p class="prev-next-title">Plan an identification experiment</p>
       </div>
     </a>
     <a class="right-next"
@@ -415,7 +560,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Recording</p>
+        <p class="prev-next-title">Record motion</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -438,8 +583,11 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-the-mounted-assembly">Configure the mounted assembly</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#freeze-a-reusable-result">Freeze a reusable result</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-local-configuration">1. Create a local configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-the-connection-and-supply">2. Set the connection and supply</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measure-the-fixture">3. Measure the fixture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-the-motion-settings">4. Choose the motion settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check-the-composed-setup-without-a-motor">5. Check the composed setup without a motor</a></li>
 </ul>
   </nav></div>
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Workflow &#8212; MotorFit</title>
+    <title>Plan an identification experiment &#8212; MotorFit</title>
   
   
   
@@ -56,8 +56,8 @@
     <link rel="canonical" href="https://motorfit.github.io/main/getting-started/workflow.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Configuration" href="../guide/configuration.html" />
-    <link rel="prev" title="Quickstart" href="quickstart.html" />
+    <link rel="next" title="Set up the bench" href="../guide/configuration.html" />
+    <link rel="prev" title="Run the offline example" href="quickstart.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -267,23 +267,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -329,7 +332,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Workflow</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Plan an identification experiment</span></li>
   </ul>
 </nav>
 </div>
@@ -346,85 +349,121 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="workflow">
-<h1>Workflow<a class="headerlink" href="#workflow" title="Link to this heading">#</a></h1>
-<p>A study connects a mounted motor, its controller, a measured fixture and a declared
-set of recordings. MotorFit supports RobStride and Damiao torque-MIT control
-and a pendulum rig. <a class="reference internal" href="../reference/motors.html"><span class="std std-doc">Motor support</span></a> describes the available
-protocols and their validation coverage.</p>
-<section id="plan-the-experiment">
-<h2>Plan the experiment<a class="headerlink" href="#plan-the-experiment" title="Link to this heading">#</a></h2>
-<p>Record the motor identity, controller mode and units, supply setting, coordinate
-convention, fixture geometry and measured masses. Choose loads, gains, trajectories
-and durations that cover the intended use. A longer run alone does not establish
-accuracy; use independent conditions and repetitions.</p>
-<p>Assign recordings to <strong>training</strong>, <strong>model-selection validation</strong> and <strong>final test</strong>
-before fitting. Samples from the same trajectory are not independent experiments.
-Keep those split assignments with the data.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="plan-an-identification-experiment">
+<h1>Plan an identification experiment<a class="headerlink" href="#plan-an-identification-experiment" title="Link to this heading">#</a></h1>
+<p>A useful model must predict motion beyond the recordings used to fit it. Plan the
+loads, trajectories and evaluation conditions before collecting data, then keep
+those choices with the results.</p>
+<p>This workflow identifies one mounted motor at a time. A new unit, changed gearbox
+or substantially different operating range needs its own measurements.</p>
+<section id="decide-what-the-model-must-reproduce">
+<h2>Decide what the model must reproduce<a class="headerlink" href="#decide-what-the-model-must-reproduce" title="Link to this heading">#</a></h2>
+<p>Write down the expected range of joint angle, speed, load and controller gains.
+Choose an error measure relevant to the task: tracking MAE, peak error, settling
+position or release behavior. Use that same definition when comparing candidates.</p>
+<p>Start with M1, which estimates torque scaling, added inertia, command delay,
+coordinate offset and Coulomb/viscous friction. <a class="reference internal" href="../reference/parameters.html"><span class="std std-doc">Parameters</span></a>
+explains these terms and the extra friction terms in M2–M6.</p>
 </section>
-<section id="keep-the-study-together">
-<h2>Keep the study together<a class="headerlink" href="#keep-the-study-together" title="Link to this heading">#</a></h2>
-<p>Use an ignored local directory such as:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/my-motor/
-  raw/train/             # completed recordings and their original evidence
-  raw/validation/
-  raw/test/
-  processed/             # the same split structure after resampling
-  candidates/            # fitted models and selection records
-  results/               # fixed-model evaluations, plots and reports
-</pre></div>
-</div>
-<p>Save the configuration, input hashes and runtime versions with the study. Keep
-failed runs and their evidence too. Use <code class="docutils literal notranslate"><span class="pre">outputs/</span></code> for disposable demonstrations
-or build products.</p>
-</section>
-<section id="follow-the-stages">
-<h2>Follow the stages<a class="headerlink" href="#follow-the-stages" title="Link to this heading">#</a></h2>
+<section id="choose-motions-and-loads">
+<h2>Choose motions and loads<a class="headerlink" href="#choose-motions-and-loads" title="Link to this heading">#</a></h2>
+<p>The experiment needs more than one kind of motion:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
-<tr class="row-odd"><th class="head"><p>Stage</p></th>
-<th class="head"><p>Outcome</p></th>
-<th class="head"><p>Guide</p></th>
+<tr class="row-odd"><th class="head"><p>Motion or change</p></th>
+<th class="head"><p>What it helps reveal</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Configure</p></td>
-<td><p>Model profile, measured fixture and per-device coordinate</p></td>
-<td><p><a class="reference internal" href="../guide/configuration.html"><span class="std std-doc">Configuration</span></a></p></td>
+<tr class="row-even"><td><p>Slow motion and reversals</p></td>
+<td><p>Friction near zero speed and residual position bias</p></td>
 </tr>
-<tr class="row-odd"><td><p>Record</p></td>
-<td><p>Commands, feedback, timestamps and configuration snapshots</p></td>
-<td><p><a class="reference internal" href="../guide/acquisition.html"><span class="std std-doc">Recording</span></a></p></td>
+<tr class="row-odd"><td><p>A frequency sweep</p></td>
+<td><p>Tracking over different speeds and accelerations</p></td>
 </tr>
-<tr class="row-even"><td><p>Process and fit</p></td>
-<td><p>Candidate parameters from the training recordings</p></td>
-<td><p><a class="reference internal" href="../guide/identification.html"><span class="std std-doc">Identification</span></a></p></td>
+<tr class="row-even"><td><p>A different known load</p></td>
+<td><p>Whether torque scaling and inertia explain changed dynamics</p></td>
 </tr>
-<tr class="row-odd"><td><p>Select</p></td>
-<td><p>A fixed model chosen on validation data</p></td>
-<td><p><a class="reference internal" href="../guide/identification.html#evaluate-and-inspect"><span class="std std-ref">Identification</span></a></p></td>
+<tr class="row-odd"><td><p>Different gains</p></td>
+<td><p>Whether the fitted model generalizes beyond one controller setting</p></td>
 </tr>
-<tr class="row-even"><td><p>Evaluate</p></td>
-<td><p>Final-test errors and supported simulator comparisons</p></td>
-<td><p><a class="reference internal" href="../guide/validation.html"><span class="std std-doc">Validation</span></a></p></td>
+<tr class="row-even"><td><p>Lift and release</p></td>
+<td><p>Passive motion and stopping after torque is disabled</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Review completion, faults and timing before processing. In RobStride recordings,
-<code class="docutils literal notranslate"><span class="pre">load</span></code> is firmware-reported nominal torque, not a shaft torque sensor. Preserve
-independent wire captures when the study requires a separate timing audit.</p>
+<p>Use <a class="reference internal" href="../reference/trajectories.html"><span class="std std-doc">the trajectory reference</span></a> to choose actual
+command names and understand amplitude and time scaling. Measure fixture masses
+and inertia separately: a wrong fixture model can be absorbed into fitted motor
+parameters.</p>
 </section>
-<section id="freeze-and-report">
-<h2>Freeze and report<a class="headerlink" href="#freeze-and-report" title="Link to this heading">#</a></h2>
-<p>Freeze the selected parameter file, split list, input hashes, controller and
-fixture definitions, software versions and selection rule before final evaluation.
-A later parameter or selection change starts a new study.</p>
-<p>Report agreement with measurements separately from agreement between simulators.
-Include the operating conditions, per-record errors and remaining unexplained
-behavior. The <a class="reference internal" href="../case-studies/rs05.html"><span class="std std-doc">RS05 study</span></a> is a worked example with a
-portable manifest and saved predictions. A manifest indexes prepared data; there
-is no command that automatically designs the split or creates a complete study.</p>
+<section id="separate-the-recordings">
+<h2>Separate the recordings<a class="headerlink" href="#separate-the-recordings" title="Link to this heading">#</a></h2>
+<p>Assign complete runs to three groups:</p>
+<ul class="simple">
+<li><p><strong>Training:</strong> the optimizer uses these to choose parameters.</p></li>
+<li><p><strong>Validation:</strong> use these to choose model family, trial budget and other fitting choices.</p></li>
+<li><p><strong>Final test:</strong> evaluate the selected model after those choices are fixed.</p></li>
+</ul>
+<p>Hold out conditions that matter to the intended use, such as an unseen load or
+gain. Keep repeated samples from the same recording together. Repeated runs also
+show whether differences between models exceed ordinary experiment variation.</p>
+<p>Use the same planned duration for training runs: the current BAM batch fitter
+truncates every training log to the shortest one. All training logs must also use
+the same processed timestep. Evaluation can use each complete recording.</p>
+</section>
+<section id="keep-the-study-in-one-place">
+<h2>Keep the study in one place<a class="headerlink" href="#keep-the-study-in-one-place" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>data/my-motor/raw/<span class="o">{</span>pilot,train,validation,test,failed<span class="o">}</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span>data/my-motor/<span class="o">{</span>processed,candidates,selected,results<span class="o">}</span>
+</pre></div>
+</div>
+<p>Use descriptive run directories, for example
+<code class="docutils literal notranslate"><span class="pre">raw/train/100g-sweep-r01/</span></code>. Each contains a complete capture and its configuration
+snapshot. Keep a run list with the motor identity, load, gains, trajectory, repeat
+and assigned split. The directory arrangement does not automatically add split
+labels to the JSON files.</p>
+<p>Pilot runs establish working settings. Move failed runs outside directories sent
+to <code class="docutils literal notranslate"><span class="pre">process</span></code>; keep their evidence for diagnosis. The data-format reference explains
+<a class="reference internal" href="../reference/data.html"><span class="std std-doc">which files are produced</span></a>.</p>
+</section>
+<section id="complete-the-stages">
+<h2>Complete the stages<a class="headerlink" href="#complete-the-stages" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Stage</p></th>
+<th class="head"><p>Finish when…</p></th>
+<th class="head"><p>Continue with</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Setup</p></td>
+<td><p>Device addresses, measured fixture and chosen motion settings are recorded</p></td>
+<td><p><a class="reference internal" href="../guide/configuration.html"><span class="std std-doc">Set up the bench</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Recording</p></td>
+<td><p>Runs have valid feedback, a consistent coordinate and acceptable timing</p></td>
+<td><p><a class="reference internal" href="../guide/acquisition.html"><span class="std std-doc">Record motion</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Fitting</p></td>
+<td><p>Candidate models are saved with training scores</p></td>
+<td><p><a class="reference internal" href="../guide/identification.html"><span class="std std-doc">Fit a model</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Selection</p></td>
+<td><p>A candidate explains validation runs and important residuals</p></td>
+<td><p><a class="reference internal" href="../guide/identification.html#evaluate-and-inspect"><span class="std std-ref">Compare candidates</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Final evaluation</p></td>
+<td><p>Errors are reported for untouched test runs</p></td>
+<td><p><a class="reference internal" href="../guide/validation.html"><span class="std std-doc">Evaluate the model</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Keep the selected model, run list, settings and software revision together. If you
+use test results to change the model, those records have become development data;
+collect new independent runs for the next final evaluation.</p>
 </section>
 </section>
 
@@ -444,7 +483,7 @@ is no command that automatically designs the split or creates a complete study.<
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Quickstart</p>
+        <p class="prev-next-title">Run the offline example</p>
       </div>
     </a>
     <a class="right-next"
@@ -452,7 +491,7 @@ is no command that automatically designs the split or creates a complete study.<
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Configuration</p>
+        <p class="prev-next-title">Set up the bench</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -475,10 +514,11 @@ is no command that automatically designs the split or creates a complete study.<
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plan-the-experiment">Plan the experiment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#keep-the-study-together">Keep the study together</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#follow-the-stages">Follow the stages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#freeze-and-report">Freeze and report</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decide-what-the-model-must-reproduce">Decide what the model must reproduce</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-motions-and-loads">Choose motions and loads</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separate-the-recordings">Separate the recordings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#keep-the-study-in-one-place">Keep the study in one place</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-the-stages">Complete the stages</a></li>
 </ul>
   </nav></div>
 

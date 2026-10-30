@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RS05 fixture &#8212; MotorFit</title>
+    <title>RS05 fixture measurements &#8212; MotorFit</title>
   
   
   
@@ -45,6 +45,8 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=fc97db16"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'case-studies/rs05-fixture';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
@@ -56,8 +58,8 @@
     <link rel="canonical" href="https://motorfit.github.io/main/case-studies/rs05-fixture.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="RS05 findings" href="rs05-findings.html" />
-    <link rel="prev" title="RS05 study" href="rs05.html" />
+    <link rel="next" title="RS05 results and remaining errors" href="rs05-findings.html" />
+    <link rel="prev" title="RS05 identification study" href="rs05.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -267,23 +269,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rs05.html">Study</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -329,7 +334,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">RS05 fixture</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">RS05 fixture measurements</span></li>
   </ul>
 </nav>
 </div>
@@ -346,69 +351,125 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="rs05-fixture">
-<h1>RS05 fixture<a class="headerlink" href="#rs05-fixture" title="Link to this heading">#</a></h1>
-<p>This page records the measured assembly used in the <a class="reference internal" href="rs05.html"><span class="std std-doc">RS05 reference study</span></a>. For a new fixture, supply its own measured geometry and masses as described in <a class="reference internal" href="../guide/configuration.html"><span class="std std-doc">bring your own motor</span></a>.</p>
-<section id="weight-and-fastener-masses">
-<h2>Weight and fastener masses<a class="headerlink" href="#weight-and-fastener-masses" title="Link to this heading">#</a></h2>
-<p>The 100 g weight uses a 20.5 g shoulder bolt. The 200/500 g weights use a 25.1 g shoulder bolt. Each M8 nut weighs 4.3 g. The 1000 g configuration is a documented fixture option; the formal dataset contains only 100/200/500 g experiments.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="rs05-fixture-measurements">
+<h1>RS05 fixture measurements<a class="headerlink" href="#rs05-fixture-measurements" title="Link to this heading">#</a></h1>
+<p>The <a class="reference internal" href="rs05.html"><span class="std std-doc">RS05 study</span></a> uses a pendulum arm with interchangeable tip weights.
+The modeled tip mass includes every fastener that moves with the weight. These
+measurements describe that assembly; use your own values for another bench.</p>
+<section id="masses-and-dimensions">
+<h2>Masses and dimensions<a class="headerlink" href="#masses-and-dimensions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
-<tr class="row-odd"><th class="head text-right"><p>Weight g</p></th>
-<th class="head text-right"><p>Bolt g</p></th>
-<th class="head text-right"><p>Nut g</p></th>
-<th class="head text-right"><p>Total tip mass g</p></th>
-<th class="head text-right"><p>Fixture pivot inertia kg·m²</p></th>
-<th class="head text-right"><p>Horizontal gravity torque N·m</p></th>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head text-right"><p>Measured value</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-right"><p>100</p></td>
-<td class="text-right"><p>20.5</p></td>
-<td class="text-right"><p>4.3</p></td>
-<td class="text-right"><p>124.8</p></td>
-<td class="text-right"><p>0.0064014785763</p></td>
-<td class="text-right"><p>0.341946337927</p></td>
+<tr class="row-even"><td><p>Pivot-to-tip radius</p></td>
+<td class="text-right"><p>0.2 m</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p>200</p></td>
-<td class="text-right"><p>25.1</p></td>
-<td class="text-right"><p>4.3</p></td>
-<td class="text-right"><p>229.4</p></td>
-<td class="text-right"><p>0.0105854785763</p></td>
-<td class="text-right"><p>0.547101455927</p></td>
+<tr class="row-odd"><td><p>Arm mass</p></td>
+<td class="text-right"><p>0.110 kg</p></td>
 </tr>
-<tr class="row-even"><td class="text-right"><p>500</p></td>
-<td class="text-right"><p>25.1</p></td>
-<td class="text-right"><p>4.3</p></td>
-<td class="text-right"><p>529.4</p></td>
-<td class="text-right"><p>0.0225854785763</p></td>
-<td class="text-right"><p>1.135500455927</p></td>
+<tr class="row-even"><td><p>Arm center of mass from pivot</p></td>
+<td class="text-right"><p>0.0900802 m</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p>1000</p></td>
-<td class="text-right"><p>25.1</p></td>
-<td class="text-right"><p>4.3</p></td>
-<td class="text-right"><p>1029.4</p></td>
-<td class="text-right"><p>0.0425854785763</p></td>
-<td class="text-right"><p>2.116165455927</p></td>
+<tr class="row-odd"><td><p>Arm inertia about pivot</p></td>
+<td class="text-right"><p>0.00140732 kg·m²</p></td>
+</tr>
+<tr class="row-even"><td><p>Hub inertia about pivot</p></td>
+<td class="text-right"><p>0.00000216 kg·m²</p></td>
+</tr>
+<tr class="row-odd"><td><p>M8 nut mass</p></td>
+<td class="text-right"><p>4.3 g</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Tip mass includes the weight, shoulder bolt and nut. The arm mass is 110 g, its center of mass is 0.0900802043205295 m from the pivot, and its pivot inertia is 0.0014073185763008957 kg·m². Hub inertia is 0.00000216 kg·m². The table includes arm and hub inertia, and excludes the motor inertia identified by BAM.</p>
-</section>
-<section id="identification-fixture">
-<h2>Identification fixture<a class="headerlink" href="#identification-fixture" title="Link to this heading">#</a></h2>
-<p>The identification model places the tip assembly at a 0.2 m radius:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>J_fixture = m_tip × length² + J_arm + J_hub
-G_horizontal = 9.80665 × (m_tip × length + m_arm × arm_com)
-</pre></div>
+<p>The 100 g weight uses a 20.5 g shoulder bolt. The 200 g and 500 g weights use a
+25.1 g bolt. The 1,000 g fixture is documented, but was not part of the formal
+111-record experiment.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Weight label</p></th>
+<th class="head text-right"><p>Bolt + nut</p></th>
+<th class="head text-right"><p>Total tip mass</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>100 g</p></td>
+<td class="text-right"><p>24.8 g</p></td>
+<td class="text-right"><p>124.8 g</p></td>
+</tr>
+<tr class="row-odd"><td><p>200 g</p></td>
+<td class="text-right"><p>29.4 g</p></td>
+<td class="text-right"><p>229.4 g</p></td>
+</tr>
+<tr class="row-even"><td><p>500 g</p></td>
+<td class="text-right"><p>29.4 g</p></td>
+<td class="text-right"><p>529.4 g</p></td>
+</tr>
+<tr class="row-odd"><td><p>1,000 g</p></td>
+<td class="text-right"><p>29.4 g</p></td>
+<td class="text-right"><p>1,029.4 g</p></td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>The four <code class="docutils literal notranslate"><span class="pre">configs/fixtures/pendulum_&lt;weight&gt;g_200mm.toml</span></code> files store <code class="docutils literal notranslate"><span class="pre">weight_mass</span></code>, <code class="docutils literal notranslate"><span class="pre">bolt_mass</span></code>, <code class="docutils literal notranslate"><span class="pre">nut_mass</span></code> and their total <code class="docutils literal notranslate"><span class="pre">mass</span></code>, in kilograms. <code class="docutils literal notranslate"><span class="pre">load_fixture()</span></code> checks that the component sum matches the total.</p>
+<p>The corresponding files are
+<code class="docutils literal notranslate"><span class="pre">configs/fixtures/pendulum_&lt;weight&gt;g_200mm.toml</span></code>. They store masses in kilograms,
+including <code class="docutils literal notranslate"><span class="pre">weight_mass</span></code>, <code class="docutils literal notranslate"><span class="pre">bolt_mass</span></code>, <code class="docutils literal notranslate"><span class="pre">nut_mass</span></code> and the total <code class="docutils literal notranslate"><span class="pre">mass</span></code>.
+The loader checks that the components sum to the total.</p>
 </section>
-<section id="cad-replay">
-<h2>CAD replay<a class="headerlink" href="#cad-replay" title="Link to this heading">#</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">finite</span></code> replay fixture includes each component’s own inertia. The <code class="docutils literal notranslate"><span class="pre">identified_point</span></code> control preserves the inertia used for identification while displaying the CAD assembly. The separate experiment archive stores the source geometry and mass-property manifest under <code class="docutils literal notranslate"><span class="pre">data/rs05/assets/bench/</span></code>.</p>
-<p>Earlier pilot metadata corrections remain in the research archive. The delivered formal v3 payloads, hashes and frozen model preserve their original values.</p>
+<section id="fixture-used-for-identification">
+<h2>Fixture used for identification<a class="headerlink" href="#fixture-used-for-identification" title="Link to this heading">#</a></h2>
+<p>The fitting model places the complete tip assembly at a single point at radius
+<code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">=</span> <span class="pre">0.2</span> <span class="pre">m</span></code>. It uses</p>
+<div class="math notranslate nohighlight">
+\[
+J_f=mL^2+J_a+J_h,\qquad
+G_\mathrm{horizontal}=9.80665\,(mL+m_a c_a).
+\]</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Weight label</p></th>
+<th class="head text-right"><p>Fixture pivot inertia (kg·m²)</p></th>
+<th class="head text-right"><p>Horizontal gravity torque (N·m)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>100 g</p></td>
+<td class="text-right"><p>0.00640148</p></td>
+<td class="text-right"><p>0.341946</p></td>
+</tr>
+<tr class="row-odd"><td><p>200 g</p></td>
+<td class="text-right"><p>0.01058548</p></td>
+<td class="text-right"><p>0.547101</p></td>
+</tr>
+<tr class="row-even"><td><p>500 g</p></td>
+<td class="text-right"><p>0.02258548</p></td>
+<td class="text-right"><p>1.135500</p></td>
+</tr>
+<tr class="row-odd"><td><p>1,000 g</p></td>
+<td class="text-right"><p>0.04258548</p></td>
+<td class="text-right"><p>2.116165</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Fixture inertia includes the arm and hub but excludes the fitted motor <code class="docutils literal notranslate"><span class="pre">armature</span></code>.
+The full-precision source values remain in the TOML files.</p>
+</section>
+<section id="fixture-used-for-cad-replay">
+<h2>Fixture used for CAD replay<a class="headerlink" href="#fixture-used-for-cad-replay" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">finite</span></code> CAD fixture includes the individual components’ own inertias. The
+<code class="docutils literal notranslate"><span class="pre">identified_point</span></code> option preserves the inertia assumed during fitting while
+showing the CAD geometry. Comparing these two choices isolates the consequence
+of the point-load approximation.</p>
+<p>The full research archive stores geometry and the mass-property manifest in
+<code class="docutils literal notranslate"><span class="pre">data/rs05/assets/bench/</span></code>. Those files are not included in the small offline example.
+Historical corrections to pilot metadata are retained in the archive; the formal
+v3 payloads and their hashes remain unchanged.</p>
 </section>
 </section>
 
@@ -428,7 +489,7 @@ G_horizontal = 9.80665 × (m_tip × length + m_arm × arm_com)
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">RS05 study</p>
+        <p class="prev-next-title">RS05 identification study</p>
       </div>
     </a>
     <a class="right-next"
@@ -436,7 +497,7 @@ G_horizontal = 9.80665 × (m_tip × length + m_arm × arm_com)
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">RS05 findings</p>
+        <p class="prev-next-title">RS05 results and remaining errors</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -459,9 +520,9 @@ G_horizontal = 9.80665 × (m_tip × length + m_arm × arm_com)
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weight-and-fastener-masses">Weight and fastener masses</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identification-fixture">Identification fixture</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cad-replay">CAD replay</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masses-and-dimensions">Masses and dimensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixture-used-for-identification">Fixture used for identification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixture-used-for-cad-replay">Fixture used for CAD replay</a></li>
 </ul>
   </nav></div>
 

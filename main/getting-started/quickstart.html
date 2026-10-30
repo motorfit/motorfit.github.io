@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Quickstart &#8212; MotorFit</title>
+    <title>Run the offline example &#8212; MotorFit</title>
   
   
   
@@ -56,7 +56,7 @@
     <link rel="canonical" href="https://motorfit.github.io/main/getting-started/quickstart.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Workflow" href="workflow.html" />
+    <link rel="next" title="Plan an identification experiment" href="workflow.html" />
     <link rel="prev" title="MotorFit" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -267,23 +267,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -329,7 +332,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Quickstart</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Run the offline example</span></li>
   </ul>
 </nav>
 </div>
@@ -346,83 +349,147 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="quickstart">
-<h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">#</a></h1>
-<p>Start with three complete RS05 recordings and their frozen M1 model. This example
-verifies installation, reproduces the saved predictions, and writes comparison
-plots and metrics. No motor, CAN connection or GPU is needed. The data lives once
-in <code class="docutils literal notranslate"><span class="pre">tests/fixtures/offline/</span></code>, shared with the regression tests.</p>
-<section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Link to this heading">#</a></h2>
-<p>Use <strong>Python 3.12</strong> and <a class="reference external" href="https://docs.astral.sh/uv/getting-started/installation/">uv</a>.
-The source repository is private, so your GitHub account needs access and a working
-SSH key.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="run-the-offline-example">
+<h1>Run the offline example<a class="headerlink" href="#run-the-offline-example" title="Link to this heading">#</a></h1>
+<p>This tutorial checks your installation and shows what a fitted model can predict.
+You will replay three measured RS05 trajectories, produce a comparison plot, and
+read the error for each recording. Everything runs on the CPU, without a motor.</p>
+<section id="install-motorfit">
+<h2>1. Install MotorFit<a class="headerlink" href="#install-motorfit" title="Link to this heading">#</a></h2>
+<p>Install <a class="reference external" href="https://docs.astral.sh/uv/getting-started/installation/">uv</a> and use
+<strong>Python 3.12</strong>. The following commands require GitHub access to the private source
+repository and an SSH key configured for that account.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>git@github.com:motorfit/motorfit.git
 <span class="nb">cd</span><span class="w"> </span>motorfit
 uv<span class="w"> </span>sync<span class="w"> </span>--frozen
 </pre></div>
 </div>
-<p>For an existing checkout, initialize the pinned BAM dependency with
-<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span> <span class="pre">--init</span> <span class="pre">--recursive</span></code> before installing. Keep the committed
-<code class="docutils literal notranslate"><span class="pre">uv.lock</span></code>; it records the tested core environment.</p>
+<p>For an existing checkout, run <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span> <span class="pre">--init</span> <span class="pre">--recursive</span></code> before
+<code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span> <span class="pre">--frozen</span></code>. This initializes BAM at the revision recorded by MotorFit.</p>
+<p>Run the remaining commands from the repository root. <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">--no-sync</span></code> uses the
+environment just installed, including any optional dependencies you add later.</p>
 </section>
-<section id="reproduce-the-frozen-model">
-<h2>Reproduce the frozen model<a class="headerlink" href="#reproduce-the-frozen-model" title="Link to this heading">#</a></h2>
-<p>Choose a new output directory:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>demo<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span>--output<span class="w"> </span>outputs/demo
+<section id="replay-the-saved-model">
+<h2>2. Replay the saved model<a class="headerlink" href="#replay-the-saved-model" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output<span class="w"> </span>outputs/demo
 </pre></div>
 </div>
-<p>The command verifies the model and dataset hashes, replays all three recordings
-with BAM, and checks agreement with their saved reference trajectories. The output
-contains <code class="docutils literal notranslate"><span class="pre">comparison.png</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">summary.json</span></code> and three prediction
-<code class="docutils literal notranslate"><span class="pre">.npz</span></code> files. <code class="docutils literal notranslate"><span class="pre">summary.json</span></code> records the hash checks and comparison results.</p>
-<p>The example preserves one recording per load, the original split labels, the raw
-and processed data, and the frozen model. The whole <code class="docutils literal notranslate"><span class="pre">tests/fixtures/offline/</span></code> directory
-can be copied elsewhere. When running outside the repository, pass absolute paths
-to the manifest and output directory.</p>
-</section>
-<section id="measured-motion-and-model-prediction">
-<h2>Measured motion and model prediction<a class="headerlink" href="#measured-motion-and-model-prediction" title="Link to this heading">#</a></h2>
-<p>This figure shows the complete 100 g frequency-sweep recording from the example’s
-gain-validation split, with its frozen BAM M1 prediction and position residual.
-It was selected to illustrate a frequency sweep; the demo evaluates all three
-recordings.</p>
-<img alt="Complete measured RS05 trajectory, frozen M1 prediction and position residual over 20 seconds." class="only-light" src="../_images/identification.png" />
-<img alt="Complete measured RS05 trajectory, frozen M1 prediction and position residual over 20 seconds." class="only-dark" src="../_images/identification-dark.png" />
-</section>
-<section id="try-processing-and-fitting">
-<h2>Try processing and fitting<a class="headerlink" href="#try-processing-and-fitting" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>process<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--raw<span class="w"> </span>tests/fixtures/offline/raw<span class="w"> </span>--out<span class="w"> </span>outputs/processed<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.01
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>fit<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--logdir<span class="w"> </span>outputs/processed<span class="w"> </span>--model<span class="w"> </span>m1<span class="w"> </span>--trials<span class="w"> </span><span class="m">20</span><span class="w"> </span>--output<span class="w"> </span>outputs/demo-fit.json
+<p>The command checks the input hashes, loads the saved M1 parameters, and simulates
+each complete recording with BAM. It does <strong>not</strong> fit new parameters. A successful
+run ends with:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PASS: 3 complete recordings; frozen references reproduced. outputs/demo
 </pre></div>
 </div>
-<p>This short fit demonstrates the API. It does not reproduce formal model selection
-or establish an independent test result. Keep the bundled frozen model unchanged;
-follow <a class="reference internal" href="../guide/identification.html"><span class="std std-doc">the identification guide</span></a> for a new study with
-declared training, validation and final-test recordings.</p>
+<p>Use a new output directory when repeating the example, such as <code class="docutils literal notranslate"><span class="pre">outputs/demo-02</span></code>.</p>
 </section>
-<section id="replay-in-mujoco">
-<h2>Replay in MuJoCo<a class="headerlink" href="#replay-in-mujoco" title="Link to this heading">#</a></h2>
+<section id="read-the-results">
+<h2>3. Read the results<a class="headerlink" href="#read-the-results" title="Link to this heading">#</a></h2>
+<p>Open <code class="docutils literal notranslate"><span class="pre">outputs/demo/comparison.png</span></code>. Each panel overlays measured position with
+the model prediction for one load. The other files are:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>What to inspect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code></p></td>
+<td><p>Position MAE and RMSE for each recording, in radians</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">summary.json</span></code></p></td>
+<td><p>Input checks, model identity and the same metrics</p></td>
+</tr>
+<tr class="row-even"><td><p>One <code class="docutils literal notranslate"><span class="pre">.npz</span></code> per recording</p></td>
+<td><p>Timestamps, measurements and predicted trajectories</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>With the bundled inputs, the position errors are approximately:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Weight</p></th>
+<th class="head"><p>Motion</p></th>
+<th class="head text-right"><p>MAE</p></th>
+<th class="head text-right"><p>RMSE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>100 g</p></td>
+<td><p>Frequency sweep</p></td>
+<td class="text-right"><p>1.607 mrad</p></td>
+<td class="text-right"><p>2.089 mrad</p></td>
+</tr>
+<tr class="row-odd"><td><p>200 g</p></td>
+<td><p>Lift and release</p></td>
+<td class="text-right"><p>5.327 mrad</p></td>
+<td class="text-right"><p>5.944 mrad</p></td>
+</tr>
+<tr class="row-even"><td><p>500 g</p></td>
+<td><p>Combined sinusoids</p></td>
+<td class="text-right"><p>1.219 mrad</p></td>
+<td class="text-right"><p>1.551 mrad</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>One milliradian is <code class="docutils literal notranslate"><span class="pre">0.001</span> <span class="pre">rad</span></code>, about <code class="docutils literal notranslate"><span class="pre">0.057°</span></code>. MAE is the mean absolute position
+error; RMSE puts more weight on large errors.</p>
+<p>The 100 g recording is shown below. The upper plot compares position; the lower
+plot shows prediction minus measurement, so small errors remain visible.</p>
+<img alt="Measured and predicted position for the full 100 g RS05 sweep, with position error below." class="only-light" src="../_images/identification.png" />
+<img alt="Measured and predicted position for the full 100 g RS05 sweep, with position error below." class="only-dark" src="../_images/identification-dark.png" />
+<p><code class="docutils literal notranslate"><span class="pre">PASS</span></code> means that the saved predictions were reproduced. It does not mean that
+prediction error is zero: the 200 g release has a larger residual, discussed in
+<a class="reference internal" href="../case-studies/rs05-findings.html"><span class="std std-doc">RS05 results</span></a>.</p>
+</section>
+<section id="try-a-physics-replay">
+<h2>4. Try a physics replay<a class="headerlink" href="#try-a-physics-replay" title="Link to this heading">#</a></h2>
+<p>To run the same model through the included MuJoCo adapter:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation<span class="w"> </span>motorfit<span class="w"> </span>replay<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span>--engine<span class="w"> </span>mujoco<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span>--output<span class="w"> </span>outputs/mujoco
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>replay<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--engine<span class="w"> </span>mujoco<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span>--output<span class="w"> </span>outputs/mujoco
 </pre></div>
 </div>
-<p>This uses the identification-equivalent pendulum fixture. See
-<a class="reference internal" href="../guide/validation.html"><span class="std std-doc">validation</span></a> for the supported M1 controller and rig, and
-<a class="reference internal" href="../reference/backends.html"><span class="std std-doc">environments</span></a> for Newton and mjlab.</p>
+<p>Read <code class="docutils literal notranslate"><span class="pre">outputs/mujoco/metrics.csv</span></code>. <code class="docutils literal notranslate"><span class="pre">position_mae_rad</span></code> compares MuJoCo with the
+measurement; <code class="docutils literal notranslate"><span class="pre">delta_bam_position_mae_rad</span></code> compares MuJoCo with BAM. These answer
+different questions. The <a class="reference internal" href="../guide/validation.html#replay-in-a-physics-backend"><span class="std std-ref">evaluation guide</span></a>
+explains the files and comparison settings.</p>
 </section>
-<section id="next-steps">
-<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="workflow.html"><span class="std std-doc">Plan a complete experiment</span></a> with separate training and evaluation data.</p></li>
-<li><p><a class="reference internal" href="../guide/configuration.html"><span class="std std-doc">Configure your motor</span></a> and <a class="reference internal" href="../guide/acquisition.html"><span class="std std-doc">collect recordings</span></a>.</p></li>
-<li><p><a class="reference internal" href="../case-studies/rs05.html"><span class="std std-doc">Read the RS05 study</span></a> for the full experiment and its limitations.</p></li>
-</ul>
+<section id="where-to-go-next">
+<h2>Where to go next<a class="headerlink" href="#where-to-go-next" title="Link to this heading">#</a></h2>
+<p>To identify a motor, begin with the <a class="reference internal" href="workflow.html"><span class="std std-doc">experiment workflow</span></a>. The three
+example records are a demonstration subset, not a training dataset for a new
+motor. The complete <a class="reference internal" href="../case-studies/rs05.html"><span class="std std-doc">RS05 study</span></a> used 111 recordings.</p>
+<p>If installation or the example fails:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Symptom</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GitHub reports <code class="docutils literal notranslate"><span class="pre">Permission</span> <span class="pre">denied</span> <span class="pre">(publickey)</span></code></p></td>
+<td><p>Check repository access and your GitHub SSH key</p></td>
+</tr>
+<tr class="row-odd"><td><p>BAM source is missing</p></td>
+<td><p>Run <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span> <span class="pre">--init</span> <span class="pre">--recursive</span></code>, then sync again</p></td>
+</tr>
+<tr class="row-even"><td><p>Output directory already exists</p></td>
+<td><p>Select a new <code class="docutils literal notranslate"><span class="pre">--output</span></code> path</p></td>
+</tr>
+<tr class="row-odd"><td><p>A SHA-256 check fails</p></td>
+<td><p>Restore the bundled fixture from Git; it has been changed or is incomplete</p></td>
+</tr>
+<tr class="row-even"><td><p>MuJoCo cannot be imported</p></td>
+<td><p>Run <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span> <span class="pre">--frozen</span> <span class="pre">--extra</span> <span class="pre">simulation</span></code>, then use <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">--no-sync</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </section>
 
@@ -450,7 +517,7 @@ uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Workflow</p>
+        <p class="prev-next-title">Plan an identification experiment</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -473,12 +540,11 @@ uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install">Install</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-the-frozen-model">Reproduce the frozen model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measured-motion-and-model-prediction">Measured motion and model prediction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#try-processing-and-fitting">Try processing and fitting</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#replay-in-mujoco">Replay in MuJoCo</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-motorfit">1. Install MotorFit</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#replay-the-saved-model">2. Replay the saved model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-the-results">3. Read the results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#try-a-physics-replay">4. Try a physics replay</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-to-go-next">Where to go next</a></li>
 </ul>
   </nav></div>
 

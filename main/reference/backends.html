@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Backends &#8212; MotorFit</title>
+    <title>Simulation backends &#8212; MotorFit</title>
   
   
   
@@ -56,8 +56,8 @@
     <link rel="canonical" href="https://motorfit.github.io/main/reference/backends.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Protocols" href="protocols.html" />
-    <link rel="prev" title="Trajectories" href="trajectories.html" />
+    <link rel="next" title="Protocol behavior" href="protocols.html" />
+    <link rel="prev" title="Command reference" href="commands.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -267,23 +267,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/identification.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/validation.html">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -329,7 +332,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Backends</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Simulation backends</span></li>
   </ul>
 </nav>
 </div>
@@ -346,80 +349,114 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="backends">
-<h1>Backends<a class="headerlink" href="#backends" title="Link to this heading">#</a></h1>
-<p>MotorFit’s standard environment is Python 3.12 with the dependencies pinned in
-<code class="docutils literal notranslate"><span class="pre">uv.lock</span></code>. Keep the main application and its development tools in <code class="docutils literal notranslate"><span class="pre">.venv/</span></code>.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="simulation-backends">
+<h1>Simulation backends<a class="headerlink" href="#simulation-backends" title="Link to this heading">#</a></h1>
+<p>Use BAM for fitting and model evaluation. Use a physics backend when you need to
+check that an M1 implementation reproduces the identified actuator behavior in
+another simulation environment.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Backend</p></th>
-<th class="head"><p>Use</p></th>
-<th class="head"><p>Environment</p></th>
+<th class="head"><p>Current use</p></th>
+<th class="head"><p>Runtime</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>BAM</p></td>
-<td><p>Process recordings, identify M1–M6 and evaluate fitted models</p></td>
-<td><p>Core install, CPU</p></td>
+<td><p>M1–M6 fitting, evaluation and plots</p></td>
+<td><p>Core environment; CPU</p></td>
 </tr>
 <tr class="row-odd"><td><p>MuJoCo</p></td>
-<td><p>Replay supported M1 torque-MIT models and release events</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">simulation</span></code> extra, CPU</p></td>
+<td><p>M1 pendulum replay and release-event studies</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">simulation</span></code> extra; CPU</p></td>
 </tr>
 <tr class="row-even"><td><p>Newton</p></td>
-<td><p>Replay M1 through Newton’s MuJoCo solver integration</p></td>
-<td><p>Separate compatible runtime</p></td>
+<td><p>M1 replay through <code class="docutils literal notranslate"><span class="pre">SolverMuJoCo</span></code></p></td>
+<td><p>Separately managed Newton runtime</p></td>
 </tr>
 <tr class="row-odd"><td><p>mjlab / MJWarp</p></td>
-<td><p>Batched M1 replay</p></td>
-<td><p>Separate compatible runtime and CUDA GPU</p></td>
+<td><p>Batched M1 pendulum replay</p></td>
+<td><p>Separately managed runtime with CUDA</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<section id="core-and-mujoco">
-<h2>Core and MuJoCo<a class="headerlink" href="#core-and-mujoco" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen
-uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation
+<p>All three MotorFit physics adapters implement the same torque-MIT controller,
+fractional position-command delay and pendulum geometry. M2–M6 and other rigs need
+additional physics integration.</p>
+<section id="bam-and-mujoco">
+<h2>BAM and MuJoCo<a class="headerlink" href="#bam-and-mujoco" title="Link to this heading">#</a></h2>
+<p>The root <code class="docutils literal notranslate"><span class="pre">uv.lock</span></code> describes the Python 3.12 environment. Install it once and run
+commands without resynchronizing:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>replay<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--engine<span class="w"> </span>mujoco<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span>--output<span class="w"> </span>outputs/mujoco-replay
 </pre></div>
 </div>
-<p>The first command installs the core; the second adds MuJoCo 3.17.0. BAM fitting and
-the offline demo do not need a GPU. Use <code class="docutils literal notranslate"><span class="pre">--extra</span> <span class="pre">simulation</span></code> on <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code> commands
-that need MuJoCo, or use <code class="docutils literal notranslate"><span class="pre">--no-sync</span></code> once the chosen environment is installed.</p>
-<p>Release-event replay additionally needs a C++17 compiler. Video rendering needs
-ffmpeg and an OpenGL/EGL runtime. These system tools are separate from Python
-packages. The <a class="reference internal" href="../development/contributing.html#development-environment"><span class="std std-ref">development setup</span></a>
-adds testing and documentation tools to the same <code class="docutils literal notranslate"><span class="pre">.venv</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">simulation</span></code> extra currently installs MuJoCo <strong>3.17.0</strong>. Without that extra,
+the core installation still supports acquisition, processing, BAM fitting and the
+offline demo. Neither BAM nor CPU MuJoCo replay requires a GPU.</p>
+<p>The <a class="reference internal" href="../guide/validation.html#replay-in-a-physics-backend"><span class="std std-ref">evaluation guide</span></a> explains
+replay outputs. <code class="docutils literal notranslate"><span class="pre">--dt</span></code> must divide the processed sample interval.</p>
 </section>
 <section id="newton-and-mjlab">
 <h2>Newton and mjlab<a class="headerlink" href="#newton-and-mjlab" title="Link to this heading">#</a></h2>
-<p>These adapters are optional. Their runtime constraints differ from the core and
-are not part of its lockfile. Use a compatible, independently managed environment
-outside this checkout and expose this source tree through <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>:</p>
+<p>These runtimes are not included in the core lockfile. Use an environment with the
+backend’s compatible dependencies, outside the project <code class="docutils literal notranslate"><span class="pre">.venv</span></code>. Expose MotorFit’s
+source tree to that interpreter:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/src"</span><span class="w"> </span>/path/to/backend/bin/python<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-m<span class="w"> </span>motorfit.identification.validate_simulation<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span>--engine<span class="w"> </span>mjlab<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span>--output<span class="w"> </span>outputs/mjlab
+<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--engine<span class="w"> </span>mjlab<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span>--output<span class="w"> </span>outputs/mjlab-replay
 </pre></div>
 </div>
-<p>Replace the interpreter path and engine with the installed backend. Python modules
-use the <code class="docutils literal notranslate"><span class="pre">motorfit</span></code> namespace. Optional replay does not require installing the
-Python-3.12-only core distribution into another Python version.</p>
-<p>Both adapters currently implement the supported M1 torque-MIT controller and
-pendulum equations. Other BAM families need their own
-physics integration. Newton’s current adapter uses <code class="docutils literal notranslate"><span class="pre">SolverMuJoCo</span></code>; it is not an
-independent Featherstone validation. See <a class="reference internal" href="../guide/validation.html"><span class="std std-doc">Validation</span></a>.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">/path/to/backend/bin/python</span></code> with the actual interpreter. Use
+<code class="docutils literal notranslate"><span class="pre">--engine</span> <span class="pre">newton</span></code> and another output directory for Newton.</p>
+<p>The Newton adapter needs NumPy, MuJoCo, Newton and Warp. It uses Newton model import
+and controls with <code class="docutils literal notranslate"><span class="pre">SolverMuJoCo</span></code>’s CPU path. Consequently, it checks the Newton
+integration rather than providing independent Featherstone dynamics.</p>
+<p>The mjlab adapter additionally uses mjlab, MuJoCo Warp and Torch on a CUDA device.
+It batches recordings with matching fixture geometry. Requested solver options
+are checked against the available GPU runtime; unsupported options can cause the
+replay to fail rather than silently changing the comparison.</p>
+<p>This repository does not provide a tested, general-purpose installation recipe
+for those external environments. Keep their package and source revisions with
+any replay results.</p>
 </section>
-<section id="recorded-study-environments">
-<h2>Recorded study environments<a class="headerlink" href="#recorded-study-environments" title="Link to this heading">#</a></h2>
-<p>The <a class="reference internal" href="../case-studies/rs05.html"><span class="std std-doc">RS05 archive</span></a> records the exact packages and source
-revisions used for its comparisons under <code class="docutils literal notranslate"><span class="pre">data/rs05/environments/</span></code>.
-The historical CAD baseline used MuJoCo 3.8; the later MJWarp 3.17 study used Python
-3.13.11, mjlab 1.6.0, MuJoCo/MJWarp 3.17.0, Warp 1.17.0, Torch 2.9.0 and NumPy 2.3.4.
-That mjlab release declared a <code class="docutils literal notranslate"><span class="pre">~=3.11.0</span></code> engine constraint, which the study explicitly
-overrode. Its package inventory is provenance, not a general installation lockfile.</p>
-<p>A newly installed runtime produces a new comparison. Preserve the recorded engine
-versions with the original results instead of relabelling archived predictions.</p>
+<section id="additional-tools">
+<h2>Additional tools<a class="headerlink" href="#additional-tools" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Task</p></th>
+<th class="head"><p>Extra system requirements</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Release-event replay</p></td>
+<td><p>C++17 compiler; the helper links against the installed MuJoCo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Replay video rendering</p></td>
+<td><p>ffmpeg and a working OpenGL/EGL runtime</p></td>
+</tr>
+<tr class="row-even"><td><p>Interactive BAM plots</p></td>
+<td><p>A graphical Matplotlib backend</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These tools are unnecessary for the offline demo and ordinary fitting.</p>
+</section>
+<section id="reproducing-an-archived-comparison">
+<h2>Reproducing an archived comparison<a class="headerlink" href="#reproducing-an-archived-comparison" title="Link to this heading">#</a></h2>
+<p>The full RS05 archive includes package inventories and revisions in
+<code class="docutils literal notranslate"><span class="pre">data/rs05/environments/</span></code>. Its earlier CAD comparison used MuJoCo 3.8. The later
+CPU/GPU comparison used Python 3.13.11, mjlab 1.6.0, MuJoCo/MJWarp 3.17.0,
+Warp 1.17.0, Torch 2.9.0 and NumPy 2.3.4.</p>
+<p>That experiment explicitly overrode mjlab 1.6.0’s declared <code class="docutils literal notranslate"><span class="pre">~=3.11.0</span></code> engine
+constraint. Its inventory documents how the saved result was produced; it is not
+a conflict-free lockfile for a new installation. Replaying with different versions
+creates a new comparison, which should retain its own <code class="docutils literal notranslate"><span class="pre">protocol.json</span></code>.</p>
 </section>
 </section>
 
@@ -434,12 +471,12 @@ versions with the original results instead of relabelling archived predictions.<
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="trajectories.html"
+       href="commands.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Trajectories</p>
+        <p class="prev-next-title">Command reference</p>
       </div>
     </a>
     <a class="right-next"
@@ -447,7 +484,7 @@ versions with the original results instead of relabelling archived predictions.<
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Protocols</p>
+        <p class="prev-next-title">Protocol behavior</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -470,9 +507,10 @@ versions with the original results instead of relabelling archived predictions.<
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-and-mujoco">Core and MuJoCo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bam-and-mujoco">BAM and MuJoCo</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#newton-and-mjlab">Newton and mjlab</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recorded-study-environments">Recorded study environments</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-tools">Additional tools</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing-an-archived-comparison">Reproducing an archived comparison</a></li>
 </ul>
   </nav></div>
 

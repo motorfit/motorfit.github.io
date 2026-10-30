@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Validation &#8212; MotorFit</title>
+    <title>Evaluate the model &#8212; MotorFit</title>
   
   
   
@@ -56,8 +56,8 @@
     <link rel="canonical" href="https://motorfit.github.io/main/guide/validation.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Motor support" href="../reference/motors.html" />
-    <link rel="prev" title="Identification" href="identification.html" />
+    <link rel="next" title="Models and parameters" href="../reference/parameters.html" />
+    <link rel="prev" title="Fit a model" href="identification.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -267,23 +267,26 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="acquisition.html">Recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="identification.html">Identification</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acquisition.html">Record</a></li>
+<li class="toctree-l1"><a class="reference internal" href="identification.html">Fit</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Evaluate</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motor support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/motors.html">Motors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/trajectories.html">Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/data.html">Data formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/backends.html">Backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/protocols.html">Protocols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 study</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">RS05 example</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05.html">Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-fixture.html">Fixture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/rs05-findings.html">Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="nav bd-sidenav">
@@ -329,7 +332,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Validation</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Evaluate the model</span></li>
   </ul>
 </nav>
 </div>
@@ -346,71 +349,137 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="validation">
-<h1>Validation<a class="headerlink" href="#validation" title="Link to this heading">#</a></h1>
-<p>Evaluate a fixed model on recordings that were not used to choose its parameters.
-Check agreement with measurements first, then compare supported physics backends.
-The <a class="reference internal" href="../getting-started/workflow.html"><span class="std std-doc">workflow</span></a> explains how to separate these decisions.
-All commands on this page run offline.</p>
-<section id="check-the-dataset">
-<h2>Check the dataset<a class="headerlink" href="#check-the-dataset" title="Link to this heading">#</a></h2>
-<p>A dataset manifest names the model, recordings, split labels and reference
-predictions using relative paths and SHA-256 hashes. For the bundled sample:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>verify<span class="w"> </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>demo<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span>--output<span class="w"> </span>outputs/validation-demo
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">verify</span></code> detects missing or modified inputs. <code class="docutils literal notranslate"><span class="pre">demo</span></code> reruns the frozen BAM model,
-compares its predictions with the saved reference and plots error against measured
-motion. Matching a saved prediction checks reproducibility; measured residuals
-show the model’s remaining error. Use a new output directory for each run.</p>
-<p>For your own study, supply its manifest under <code class="docutils literal notranslate"><span class="pre">data/&lt;study&gt;/</span></code>. The CLI reads a
-prepared manifest; it does not infer the split or build a new study automatically.</p>
-</section>
-<section id="evaluate-held-out-recordings">
-<h2>Evaluate held-out recordings<a class="headerlink" href="#evaluate-held-out-recordings" title="Link to this heading">#</a></h2>
-<p>If you have processed recordings but no manifest, evaluate the fixed parameter
-file directly with BAM:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>motorfit<span class="w"> </span>fit<span class="w"> </span><span class="se">\</span>
+  <section class="tex2jax_ignore mathjax_ignore" id="evaluate-the-model">
+<h1>Evaluate the model<a class="headerlink" href="#evaluate-the-model" title="Link to this heading">#</a></h1>
+<p>Evaluate the selected model on complete recordings that were not used to fit its
+parameters or choose its family. Keep the model fixed throughout this evaluation.
+The commands on this page run offline.</p>
+<section id="evaluate-final-test-recordings">
+<h2>1. Evaluate final-test recordings<a class="headerlink" href="#evaluate-final-test-recordings" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>process<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--raw<span class="w"> </span>data/my-motor/raw/test<span class="w"> </span>--out<span class="w"> </span>data/my-motor/processed/test<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.01
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>fit<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--logdir<span class="w"> </span>data/my-motor/processed/test<span class="w"> </span>--eval<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--output<span class="w"> </span>data/my-motor/candidates/m1.json
+<span class="w">  </span>--output<span class="w"> </span>data/my-motor/selected/model.json
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>plot<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--logdir<span class="w"> </span>data/my-motor/processed/test<span class="w"> </span>--sim<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--params<span class="w"> </span>data/my-motor/selected/model.json
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">--eval</span></code> flag loads the model without fitting. Select it on validation data
-before using the final test directory. Report operating conditions and errors
-by recording or split, rather than using an average to hide a failing condition.</p>
+<p>Use the same processing timestep and evaluation convention as in model selection.
+Without <code class="docutils literal notranslate"><span class="pre">--reset_period</span></code>, each simulation starts from the recording’s initial
+position and speed, then runs without resetting to measurements. A periodic reset
+changes the question being tested and must be reported if used.</p>
+<p>The aggregate score averages each log’s position MAE equally. It can hide a bad
+release or a single poorly predicted load. Inspect the plots and evaluate important
+conditions separately; a directory containing only one processed log gives that
+log’s score with the same command.</p>
+</section>
+<section id="diagnose-the-remaining-error">
+<h2>2. Diagnose the remaining error<a class="headerlink" href="#diagnose-the-remaining-error" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pattern in the residual</p></th>
+<th class="head"><p>What to investigate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Nearly constant position bias</p></td>
+<td><p>Software zero, fixture geometry and fitted <code class="docutils literal notranslate"><span class="pre">q_offset</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Phase mismatch that grows with motion speed</p></td>
+<td><p>Command delay, sample timing and the controller law</p></td>
+</tr>
+<tr class="row-even"><td><p>Error around reversals or near rest</p></td>
+<td><p>Friction model and low-speed data coverage</p></td>
+</tr>
+<tr class="row-odd"><td><p>Error changes strongly with load</p></td>
+<td><p>Tip mass, radius, fixture inertia and torque scaling</p></td>
+</tr>
+<tr class="row-even"><td><p>Error concentrated at torque release</p></td>
+<td><p>Enable timing and passive mechanics</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These are diagnostic starting points, not unique explanations. Test a proposed
+cause against additional evidence. The <a class="reference internal" href="../case-studies/rs05-findings.html"><span class="std std-doc">RS05 results</span></a>
+show a case where correcting event timing improved the early trajectory but did
+not explain the final stopping error.</p>
 </section>
 <section id="replay-in-a-physics-backend">
 <h2>Replay in a physics backend<a class="headerlink" href="#replay-in-a-physics-backend" title="Link to this heading">#</a></h2>
-<p>The included adapters implement <strong>M1, torque-MIT control and the pendulum rig</strong>.
-BAM fitting also supports M2–M6, but these do not yet
-have corresponding MuJoCo/Newton/mjlab replay adapters.</p>
+<p>The included replay adapters support <strong>M1, torque-MIT control and the pendulum
+fixture</strong>. They compare a fixed model in another engine with both measurements and
+saved BAM predictions.</p>
+<p>For a complete runnable example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation
-uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation<span class="w"> </span>motorfit<span class="w"> </span>replay<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span>--engine<span class="w"> </span>mujoco<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span>--output<span class="w"> </span>outputs/mujoco
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>replay<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--engine<span class="w"> </span>mujoco<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span>--output<span class="w"> </span>outputs/mujoco-evaluation
 </pre></div>
 </div>
-<p>Replay uses the same initial state, encoded commands, enable flags and frozen
-parameters as the saved recording. Without <code class="docutils literal notranslate"><span class="pre">--scene-assets</span></code>, it uses the
-identification-equivalent point-load fixture. A new manifest does not implement
-a different controller or fixture equation.</p>
-<p>Use <code class="docutils literal notranslate"><span class="pre">--engine</span> <span class="pre">newton</span></code> or <code class="docutils literal notranslate"><span class="pre">--engine</span> <span class="pre">mjlab</span></code> from a compatible independent environment;
-see <a class="reference internal" href="../reference/backends.html"><span class="std std-doc">Backends</span></a>. Requested options are checked against the
-selected backend. Keep solver settings, timestep, delay, friction and disable
-handling in the comparison report alongside position error.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--dt</span></code> here is the <strong>physics timestep</strong>, not the processed sample interval. It must
+divide the recording timestep; for logs at <code class="docutils literal notranslate"><span class="pre">0.01</span> <span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">0.002</span> <span class="pre">s</span></code> gives five physics
+steps per sample. Replay preserves the recorded controller gains, commands,
+enable flags and initial state.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Output</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code></p></td>
+<td><p>Errors for each recording</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.json</span></code></p></td>
+<td><p>Per-record values and averages by split</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">predictions/</span></code></p></td>
+<td><p>Saved simulated states, commands and measured values</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scenes/</span></code></p></td>
+<td><p>The generated pendulum MJCF scenes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">protocol.json</span></code></p></td>
+<td><p>Model hash, engine versions, timestep and solver settings</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">COMPLETE.json</span></code></p></td>
+<td><p>Completion and unchanged-input checks</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Read <code class="docutils literal notranslate"><span class="pre">position_mae_rad</span></code> as simulator-versus-measurement error.
+<code class="docutils literal notranslate"><span class="pre">delta_bam_position_mae_rad</span></code> is simulator-versus-BAM disagreement. Agreement between
+two simulators checks implementation consistency; it does not remove an error
+shared by both models.</p>
+<p>The replay manifest format requires curated recordings and saved reference
+predictions. A new <code class="docutils literal notranslate"><span class="pre">record</span></code> directory is not yet such a dataset. Use the ordinary
+<code class="docutils literal notranslate"><span class="pre">fit</span> <span class="pre">--eval</span></code>/<code class="docutils literal notranslate"><span class="pre">plot</span> <span class="pre">--sim</span></code> path above for a new study, or prepare the
+<a class="reference internal" href="../reference/data.html#portable-datasets"><span class="std std-ref">dataset format</span></a> for packaged replay.</p>
+<p><a class="reference internal" href="../reference/backends.html"><span class="std std-doc">Backends</span></a> covers Newton and mjlab runtimes. M2–M6 can be
+evaluated with BAM; the current MotorFit physics adapters do not implement them.</p>
 </section>
-<section id="inspect-and-report-results">
-<h2>Inspect and report results<a class="headerlink" href="#inspect-and-report-results" title="Link to this heading">#</a></h2>
-<p>Keep the model hash, dataset split, software versions, solver options and timestep
-with the generated metrics and trajectories. Compare BAM-to-measurement error
-separately from simulator-to-BAM disagreement. Simulator agreement does not establish
-that a model explains unmeasured hardware behavior.</p>
-<p>The <a class="reference internal" href="../case-studies/rs05.html#advanced-validation"><span class="std std-ref">RS05 study</span></a> adds independent CAN
-audits, CAD scenes, release-event timing and video rendering. Those tools depend
-on its archived evidence and capture conventions. Software regression coverage is
-described in <a class="reference internal" href="../development/contributing.html#development-environment"><span class="std std-ref">Contributing</span></a>.</p>
+<section id="report-the-result">
+<h2>3. Report the result<a class="headerlink" href="#report-the-result" title="Link to this heading">#</a></h2>
+<p>Keep the following with the selected model:</p>
+<ul class="simple">
+<li><p>Motor identity, mounting, loads, supply and controller gains.</p></li>
+<li><p>Training, validation and test run lists.</p></li>
+<li><p>Model file, input hashes and software revision.</p></li>
+<li><p>Per-condition errors, the worst runs and representative residual plots.</p></li>
+<li><p>Any simulator version, timestep, solver options and reset convention used.</p></li>
+</ul>
+<p>Use the acceptance criteria chosen for your application. The replay tool’s
+<code class="docutils literal notranslate"><span class="pre">trajectory_gate_pass</span></code> records an inherited 5 mrad mean-error check per split;
+it is not a universal accuracy requirement or proof of satisfactory release
+behavior.</p>
+<p>An actuator model is ready for integration when its errors are understood and
+acceptable over the intended conditions. <a class="reference internal" href="../reference/parameters.html#using-the-model-in-simulation"><span class="std std-ref">Parameters</span></a>
+explains what carries into a robot simulation and what still requires controller
+or coordinate handling.</p>
 </section>
 </section>
 
@@ -430,15 +499,15 @@ described in <a class="reference internal" href="../development/contributing.htm
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Identification</p>
+        <p class="prev-next-title">Fit a model</p>
       </div>
     </a>
     <a class="right-next"
-       href="../reference/motors.html"
+       href="../reference/parameters.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Motor support</p>
+        <p class="prev-next-title">Models and parameters</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -461,10 +530,10 @@ described in <a class="reference internal" href="../development/contributing.htm
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check-the-dataset">Check the dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-held-out-recordings">Evaluate held-out recordings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-final-test-recordings">1. Evaluate final-test recordings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnose-the-remaining-error">2. Diagnose the remaining error</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#replay-in-a-physics-backend">Replay in a physics backend</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-and-report-results">Inspect and report results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#report-the-result">3. Report the result</a></li>
 </ul>
   </nav></div>
 
