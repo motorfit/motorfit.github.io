@@ -509,8 +509,8 @@ aggregate accuracy, cross-engine agreement and unresolved behavior.</p>
 <section id="what-to-reproduce">
 <h2>What to reproduce<a class="headerlink" href="#what-to-reproduce" title="Link to this heading">#</a></h2>
 <p>The repository includes three complete recordings, the selected model and saved
-BAM predictions. <a class="reference internal" href="../getting-started/quickstart.html"><span class="std std-doc">Quickstart</span></a> reproduces this
-self-contained subset without the research archive.</p>
+BAM predictions. <a class="reference internal" href="#reproduce-three-recorded-runs">Reproduce these three runs</a>
+with the bundled inputs.</p>
 <p>The full dataset, CAD, extended comparisons and videos are kept in a separate
 local archive. They are <strong>not downloaded by cloning the repository</strong>:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/rs05/
@@ -529,10 +529,66 @@ local archive. They are <strong>not downloaded by cloning the repository</strong
 <p>The archive’s <code class="docutils literal notranslate"><span class="pre">results/README.md</span></code> indexes the complete evidence. Model-selection
 records are under <code class="docutils literal notranslate"><span class="pre">models/provenance/</span></code> and <code class="docutils literal notranslate"><span class="pre">results/identification/</span></code>.</p>
 </section>
+<section id="reproduce-three-recorded-runs">
+<h2>Reproduce three recorded runs<a class="headerlink" href="#reproduce-three-recorded-runs" title="Link to this heading">#</a></h2>
+<p>After <a class="reference internal" href="../getting-started/quickstart.html#install-motorfit"><span class="std std-ref">installing MotorFit</span></a>,
+run the bundled RS05 example from the repository root. It uses a saved model
+and runs on the CPU with the recorded inputs.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output<span class="w"> </span>outputs/rs05-demo
+</pre></div>
+</div>
+<p>The command checks the input hashes, replays the three recordings in BAM, and
+writes <code class="docutils literal notranslate"><span class="pre">comparison.png</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">summary.json</span></code> and one <code class="docutils literal notranslate"><span class="pre">.npz</span></code> file per
+recording with the trajectories. Choose a fresh output directory for another run.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Weight</p></th>
+<th class="head"><p>Motion</p></th>
+<th class="head text-right"><p>Position MAE</p></th>
+<th class="head text-right"><p>Position RMSE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>100 g</p></td>
+<td><p>Frequency sweep</p></td>
+<td class="text-right"><p>1.607 mrad</p></td>
+<td class="text-right"><p>2.089 mrad</p></td>
+</tr>
+<tr class="row-odd"><td><p>200 g</p></td>
+<td><p>Lift and release</p></td>
+<td class="text-right"><p>5.327 mrad</p></td>
+<td class="text-right"><p>5.944 mrad</p></td>
+</tr>
+<tr class="row-even"><td><p>500 g</p></td>
+<td><p>Combined sinusoids</p></td>
+<td class="text-right"><p>1.219 mrad</p></td>
+<td class="text-right"><p>1.551 mrad</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">PASS</span></code> reports successful reproduction of the saved predictions. The table gives
+their errors against the measurements. The 100 g example below shows the measured
+and predicted angles above the residual plot.</p>
+<img alt="Measured and predicted position for the full 100 g RS05 sweep, with position error below." class="only-light" src="../_images/identification.png" />
+<img alt="Measured and predicted position for the full 100 g RS05 sweep, with position error below." class="only-dark" src="../_images/identification-dark.png" />
+<p>To replay the same recordings in MuJoCo:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation
+uv<span class="w"> </span>run<span class="w"> </span>--no-sync<span class="w"> </span>motorfit<span class="w"> </span>replay<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dataset<span class="w"> </span>tests/fixtures/offline/manifest.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--engine<span class="w"> </span>mujoco<span class="w"> </span>--dt<span class="w"> </span><span class="m">0</span>.002<span class="w"> </span>--output<span class="w"> </span>outputs/rs05-mujoco
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">outputs/rs05-mujoco/metrics.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">position_mae_rad</span></code> compares MuJoCo with
+measurements and <code class="docutils literal notranslate"><span class="pre">delta_bam_position_mae_rad</span></code> compares it with BAM. The
+<a class="reference internal" href="../guide/validation.html#replay-in-a-physics-backend"><span class="std std-ref">evaluation guide</span></a> explains
+the output files and comparison settings.</p>
+</section>
 <section id="advanced-validation">
 <h2>Advanced validation<a class="headerlink" href="#advanced-validation" title="Link to this heading">#</a></h2>
-<p>The following operations require the full archive. They are not part of the
-three-record quickstart.</p>
+<p>The following operations require the full archive.</p>
 <section id="replay-the-cad-fixture">
 <h3>Replay the CAD fixture<a class="headerlink" href="#replay-the-cad-fixture" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>simulation
@@ -670,6 +726,7 @@ This accounts for the 0.033 s difference between compilations.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rs05-reference-acquisition">RS05 reference acquisition</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-reproduce">What to reproduce</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-three-recorded-runs">Reproduce three recorded runs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-validation">Advanced validation</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#replay-the-cad-fixture">Replay the CAD fixture</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#audit-feedback-and-release-timing">Audit feedback and release timing</a></li>
